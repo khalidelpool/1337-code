@@ -1,0 +1,192 @@
+sh-5.2$ python -u "/home/kel-mous/github/push_swap/result.py"
+Enter sequence length (2-6 recommended): 5
+Enter minimum value (default 0): 
+Enter maximum value (default 20): 
+
+Generating and testing 32 patterns...
+
+Completed in 0.17 seconds
+
+Results (sorted by number of operations):
+----------------------------------------------------------------------
+
+Pattern ↑↑↑↑↓:
+Sequence: [0, 1, 2, 3, 4]
+No solution found
+None
+----------------------------------------------------------------------
+
+Pattern ↑↑↑↓↑:
+Sequence: [1, 2, 3, 4, 0]
+Solution (1 operations):
+rra
+----------------------------------------------------------------------
+
+Pattern ↓↑↑↑↑:
+Sequence: [4, 0, 1, 2, 3]
+Solution (1 operations):
+ra
+----------------------------------------------------------------------
+
+Pattern ↓↑↑↑↓:
+Sequence: [1, 0, 2, 3, 4]
+Solution (1 operations):
+sa
+----------------------------------------------------------------------
+
+Pattern ↑↑↓↑↑:
+Sequence: [2, 3, 4, 0, 1]
+Solution (2 operations):
+rra rra
+----------------------------------------------------------------------
+
+Pattern ↑↓↑↑↑:
+Sequence: [3, 4, 0, 1, 2]
+Solution (2 operations):
+ra ra
+----------------------------------------------------------------------
+
+Pattern ↓↓↑↑↑:
+Sequence: [4, 1, 0, 2, 3]
+Solution (2 operations):
+ra sa
+----------------------------------------------------------------------
+
+Pattern ↑↓↑↑↓:
+Sequence: [0, 2, 1, 3, 4]
+Solution (3 operations):
+pb sa pa
+----------------------------------------------------------------------
+
+Pattern ↓↑↑↓↑:
+Sequence: [2, 0, 3, 4, 1]
+Solution (3 operations):
+sa rra sa
+----------------------------------------------------------------------
+
+Pattern ↓↑↓↑↑:
+Sequence: [3, 0, 4, 1, 2]
+Solution (3 operations):
+ra sa ra
+----------------------------------------------------------------------
+
+Pattern ↑↑↓↑↓:
+Sequence: [0, 1, 3, 2, 4]
+Solution (5 operations):
+pb pb sa pa pa
+----------------------------------------------------------------------
+
+Pattern ↑↓↑↓↑:
+Sequence: [1, 3, 2, 4, 0]
+Solution (5 operations):
+pb sa rra pa sa
+----------------------------------------------------------------------
+
+Pattern ↑↓↓↑↑:
+Sequence: [2, 4, 3, 0, 1]
+Solution (5 operations):
+ra pb ra pa ra
+----------------------------------------------------------------------
+
+Pattern ↓↓↑↑↓:
+Sequence: [2, 1, 0, 3, 4]
+Solution (5 operations):
+sa pb sa pa sa
+----------------------------------------------------------------------
+
+Pattern ↑↓↓↓↓:
+Sequence: [0, 4, 3, 2, 1]
+Solution (6 operations):
+pb sa rra rra sa pa
+----------------------------------------------------------------------
+
+Pattern ↓↑↑↓↓:
+Sequence: [1, 0, 2, 4, 3]
+Solution (6 operations):
+pb pb rrr sa pa pa
+----------------------------------------------------------------------
+
+Pattern ↓↑↓↑↓:
+Sequence: [1, 0, 3, 2, 4]
+Solution (6 operations):
+pb pb sa pa pa sa
+----------------------------------------------------------------------
+
+Pattern ↓↑↓↓↑:
+Sequence: [2, 0, 4, 3, 1]
+Solution (6 operations):
+pb pb ss pa rra pa
+----------------------------------------------------------------------
+
+Pattern ↓↓↓↑↑:
+Sequence: [4, 2, 1, 0, 3]
+Solution (6 operations):
+ra sa pb sa pa sa
+----------------------------------------------------------------------
+
+Pattern ↑↑↑↓↓:
+Sequence: [0, 1, 2, 4, 3]
+Solution (7 operations):
+pb pb rrr sa pa pa sa
+----------------------------------------------------------------------
+
+Pattern ↑↑↓↓↑:
+Sequence: [1, 2, 4, 3, 0]
+Solution (7 operations):
+pb sa rra sa ra pa sa
+----------------------------------------------------------------------
+
+Pattern ↑↑↓↓↓:
+Sequence: [0, 1, 4, 3, 2]
+Solution (7 operations):
+pb pb sa pa rra sa pa
+----------------------------------------------------------------------
+
+Pattern ↑↓↑↓↓:
+Sequence: [0, 2, 1, 4, 3]
+Solution (7 operations):
+pb pb rra sa pa sa pa
+----------------------------------------------------------------------
+
+Pattern ↑↓↓↑↓:
+Sequence: [0, 3, 2, 1, 4]
+Solution (7 operations):
+pb sa pb sa pa sa pa
+----------------------------------------------------------------------
+
+Pattern ↑↓↓↓↑:
+Sequence: [1, 4, 3, 2, 0]
+Solution (7 operations):
+pb sa rra rra sa pa sa
+----------------------------------------------------------------------
+
+Pattern ↓↓↑↓↑:
+Sequence: [3, 1, 0, 4, 2]
+Solution (7 operations):
+sa pb sa rra sa pa sa
+----------------------------------------------------------------------
+
+Pattern ↓↑↓↓↓:
+Sequence: [1, 0, 4, 3, 2]
+Solution (8 operations):
+pb pb sa pa rra sa pa sa
+----------------------------------------------------------------------
+
+Pattern ↓↓↑↓↓:
+Sequence: [2, 1, 0, 4, 3]
+Solution (8 operations):
+pb pb rra ss pa sa pa sa
+----------------------------------------------------------------------
+
+Pattern ↓↓↓↑↓:
+Sequence: [3, 2, 1, 0, 4]
+Solution (9 operations):
+sa pb sa pb ss pa sa pa sa
+----------------------------------------------------------------------
+
+Pattern ↓↓↓↓↑:
+Sequence: [4, 3, 2, 1, 0]
+Solution (9 operations):
+sa rra rra rra sa pb sa pa sa
+----------------------------------------------------------------------
+sh-5.2$ 

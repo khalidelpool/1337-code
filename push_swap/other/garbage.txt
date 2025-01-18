@@ -1,0 +1,6 @@
+// if (lci_a <= size_A / 2 && lci_b <= size_B / 2) //maybe you should check when to stop
+		// 	ft_rot(head_A), ft_rot(head_B), write(1, "rr\n", 3);
+		// else if (lci_a > size_A / 2 && lci_b > size_B / 2)
+		// 	ft_revrot(head_A), ft_revrot(head_B), write(1, "rrr\n", 4);
+		// else 
+	
