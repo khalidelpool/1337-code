@@ -4,3 +4,23 @@
 		// 	ft_revrot(head_A), ft_revrot(head_B), write(1, "rrr\n", 4);
 		// else 
 	
+//99 0 25 -38 10 7 42
+//ARG="14 -2 13 -18 20 17 7 -7 18 19 -14 -4 -3 12 8 -9 15 -1 6 -5"; ./push_swap $ARG | ./checker_linux $ARG
+
+if (ft_is_sorted(*head))
+		return (1);
+	ft_swap(head);
+	if (reccursive(head))
+		return(1);
+	else
+		ft_swap(head);
+	ft_rot(head);
+	if (reccursive(head))
+		return(1);
+	else
+		ft_revrot(head);
+	ft_revrot(head);
+	if (reccursive(head))
+		return(1);
+	else
+		ft_rot(head);
