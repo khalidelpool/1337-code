@@ -1,5 +1,19 @@
 #include "push_swap.h"
 
+int    ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+    size_t    i;
+
+    i = 0;
+    while (i < n)
+    {
+        if (s1[i] != s2[i] || (s1[i] == 0 && s2[i] == 0))
+            return (((unsigned char)s1[i] - (unsigned char)s2[i]));
+        i++;
+    }
+    return ((0));
+}
+
 int checker_moves(char *move, stack **head_A, stack **head_B)
 {
 	if (!ft_strncmp(move, "sa\n", 4))
@@ -36,29 +50,21 @@ int main(int ac, char **av)
 
 	if (ac < 2)
 		return (0);
+    head_A = NULL;
+	head_B = NULL;
 	head_A = parser(1, ac, av, (stack *)NULL);
     moves = get_next_line(0);
-    while (moves != NULL)
+    while (moves != NULL && !checker_moves(moves, &head_A, &head_B))
     {
-        if (checker_moves(moves, &head_A, &head_B))
-        {
-            write(1, "KO\n", 3);
-            ft_clearlst(&head_A);
-	        ft_clearlst(&head_B);
-            return (1);
-        }
         free(moves);
         moves = get_next_line(0);
     }
-    if (ft_is_sorted(head_A))
+    if (ft_is_sorted(head_A) && !ft_sizelst(head_B)
+        && (ft_clearlst(&head_A), ft_clearlst(&head_B), 1))
     {
-        ft_clearlst(&head_A);
-	    ft_clearlst(&head_B);
         write(1, "OK\n", 3);
         return (0);
     }
     write(1, "KO\n", 3);
-    ft_clearlst(&head_A);
-	ft_clearlst(&head_B);
-    return (1);
+    return (0);
 }

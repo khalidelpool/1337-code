@@ -119,11 +119,15 @@ int main(int ac, char **av)
 	head_B = NULL;
 	last_move = 0;
 	head_A = parser(1, ac, av, (stack *)NULL);
-	// moving least cost element in each iteration
+	if (ft_is_sorted(head_A))
+	{
+		ft_clearlst(&head_A);
+		ft_clearlst(&head_B);
+		return (0);
+	}
 	while (ft_sizelst(head_A) > 3)
 		choose_rank(&head_A, &head_B, &last_move);
 	ft_sort3(&head_A, &last_move);
-	// moving least cost element in each iteration
 	while (ft_sizelst(head_B))
 		ft_cost(&head_B, &head_A, -1, &last_move);
 	clearup(&head_A, &last_move);

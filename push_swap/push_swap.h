@@ -1,17 +1,14 @@
 #ifndef PUSH_SWAP
 # define PUSH_SWAP
 
+# include "get_next_line.h"
 # include <limits.h>
-# include <ctype.h>
 # include <stdio.h>
-# include <string.h>
-# include <stdlib.h>
-# include <unistd.h>
+# define MAX 2147483648
 
 typedef struct s_stack
 {
 	int				number;
-	int				rank;
 	struct s_stack	*next;
 }	stack;
 
@@ -21,10 +18,10 @@ int		ft_is_sorted(stack *head);
 void	ft_iterlst(stack *lst, void (*f)(int));
 
 // push_swap_list_utils.c
-stack	*ft_newlst(int content);
 int		ft_sizelst(stack *node);
 void	ft_clearlst(stack **lst);
-void	ft_add_backlst(stack **lst, stack *new);
+int		ft_is_sorted(stack *head);
+int		ft_add_backlst(stack **lst, int content);
 int		ft_lstcompare(stack* lst, int to_compare);
 
 // operations.c
@@ -34,9 +31,9 @@ void	ft_revrot(stack **head);
 void	ft_push(stack **src, stack **dest);
 
 // push_swap_input(1/2).c
-long	ft_atoy(const char *nptr);
 void	ft_bzero(void *s, size_t n);
 stack	*parser(int i, int ac, char **av, stack *head);
+long	ft_atoy(const char *nptr, long result, int sign);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 // push_swap_utils.c

@@ -6,21 +6,6 @@ void f(int content)
 	printf("content is: %d\n", content);
 }
 
-int ft_is_sorted(stack *head)
-{
-	int last;
-
-	last = -2147483648;
-	while (head != NULL)
-	{
-		if (last > head->number)
-			return (0);
-		last = head->number;
-		head = head->next;
-	}
-	return (1);
-}
-
 void	ft_iterlst(stack *lst, void (*f)(int))
 {
 	stack	*curr;
@@ -38,29 +23,38 @@ void	ft_iterlst(stack *lst, void (*f)(int))
 
 
 
-stack	*ft_newlst(int content)
+int		ft_is_sorted(stack *head)
 {
-	stack	*node;
+	int last;
 
-	node = malloc(sizeof(stack));
-	if (node == NULL)
-		return ((NULL));
-	node->number = content;
-	node->next = NULL;
-	return ((node));
+	last = -2147483648;
+	while (head != NULL)
+	{
+		if (last > head->number)
+			return (0);
+		last = head->number;
+		head = head->next;
+	}
+	return (1);
 }
 
-void	ft_add_backlst(stack **lst, stack *new)
+int	ft_add_backlst(stack **lst, int content)
 {
 	stack	*last;
+	stack *new;
 
+	new = malloc(sizeof(stack));
+	if (new == NULL)
+		return (1);
+	new->number = content;
+	new->next = NULL;
 	last = *lst;
 	if (lst == NULL)
-		return ;
+		return (0);
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return ;
+		return (0);
 	}
 	while (last->next != NULL)
 	{
@@ -68,6 +62,7 @@ void	ft_add_backlst(stack **lst, stack *new)
 	}
 	last->next = new;
 	new->next = NULL;
+	return (0);
 }
 
 int ft_lstcompare(stack *lst, int to_compare)

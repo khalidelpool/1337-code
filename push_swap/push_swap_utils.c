@@ -10,7 +10,7 @@ int ft_index_max(stack *head, int choice)
 	curr = head;
 	index = 0;
 	i = 0;
-	max = -2147483648 + choice;
+	max = INT_MIN + choice;
 	while (curr != NULL)
 	{
 		if ((!choice && max <= curr->number) || (choice && max >= curr->number))
@@ -34,7 +34,7 @@ int ft_target(int number, stack **head_B, int choice)
 	i = 0;
 	curr = *head_B;
 	index = -1;
-	target = -2147483648 + choice;
+	target = INT_MIN + choice;
 	while(curr != NULL)
 	{
 		if ((!choice && number > curr->number && curr->number >= target) || (choice && number < curr->number && curr->number <= target))

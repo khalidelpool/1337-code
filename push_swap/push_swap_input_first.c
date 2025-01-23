@@ -61,7 +61,7 @@ char	**ft_split(const char *s, char c)
 	k = 0;
 	ptr = ft_calloc((count_words(s, c, 0) + 1), sizeof(char *));
 	if (!ptr || (!s && (free(ptr), 1)))
-		return ((0));
+		exit(1);
 	while (k < count_words(s, c, 0))
 	{
 		j = 0;
@@ -71,7 +71,7 @@ char	**ft_split(const char *s, char c)
 			j++;
 		ptr[k] = ft_substr(s, i, j);
 		if (!ptr[k])
-			return ((free_arr(&ptr)));
+			free_arr(&ptr), exit(1);
 		i = i + j;
 		k++;
 	}
@@ -88,21 +88,21 @@ stack *parser(int i, int ac, char **av, stack *head)
 	while (i < ac)
 	{
 		numbers = ft_split(av[i], ' ');
+		if (numbers[0] == NULL)
+			return (write(2, "Error\n", 6), NULL);
 		j = 0;
 		while (numbers[j])
 		{
-			temp = ft_atoy(numbers[j]);
-			if (temp == 2147483648 || ft_lstcompare(head, (int)temp))
+			temp = ft_atoy(numbers[j], 0, 1);
+			if (temp == MAX || ft_lstcompare(head, (int)temp))
 			{
-				free_arr(&numbers);
-				ft_clearlst(&head);
+				free_arr(&numbers), ft_clearlst(&head);
 				return (write(2, "Error\n", 6), NULL);
 			}
-			ft_add_backlst(&head, ft_newlst((int)temp));
-			j++;
+			if ((j++, ft_add_backlst(&head, (int)temp)))
+				free_arr(&numbers), ft_clearlst(&head), exit(1);
 		}
-		free_arr(&numbers);
-		i++;
+		free_arr(&numbers), i++;
 	}
 	return (head);
 }

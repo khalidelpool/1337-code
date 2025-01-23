@@ -52,13 +52,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return ((substring));
 }
 
-long	ft_atoy(const char *nptr)
+long	ft_atoy(const char *nptr, long result, int sign)
 {
-	long	result;
-	int	sign;
-
-	result = 0;
-	sign = 1;
 	while ((*nptr > 8 && *nptr < 14) || *nptr == 32)
 		nptr++;
 	if (*nptr == '-' || *nptr == '+')
@@ -66,17 +61,19 @@ long	ft_atoy(const char *nptr)
 		if (*nptr == '-')
 			sign = -1;
 		nptr++;
+		if (!nptr[0])
+			return (MAX);
 	}
 	else if (!ft_isdigit(*nptr))
-		return (2147483648);
+		return (MAX);
 	while (ft_isdigit(*nptr))
 	{
 		result = result * 10 + *nptr - 48;
-		if (result < -2147483648 || result > 2147483647)
-			return (2147483648);
+		if (result > MAX || (result == MAX && sign == 1))
+			return (MAX);
 		nptr++;
 	}
 	if (!((*nptr > 8 && *nptr < 14) || *nptr == 32 || *nptr == 0))
-		return (2147483648);
+		return (MAX);
 	return (((result * sign)));
 }
