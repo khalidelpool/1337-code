@@ -30,35 +30,35 @@ int checker_moves(char *move, stack **head_A, stack **head_B)
 
 int main(int ac, char **av)
 {
-	stack *head;
-	stack *head_b = NULL;
+	stack *head_A;
+	stack *head_B = NULL;
     char *moves;
 
 	if (ac < 2)
 		return (0);
-	head = parser(1, ac, av, (stack *)NULL);
+	head_A = parser(1, ac, av, (stack *)NULL);
     moves = get_next_line(0);
     while (moves != NULL)
     {
-        if (checker_moves(moves, &head, &head_b))
+        if (checker_moves(moves, &head_A, &head_B))
         {
             write(1, "KO\n", 3);
-            ft_clearlst(&head);
-	        ft_clearlst(&head_b);
+            ft_clearlst(&head_A);
+	        ft_clearlst(&head_B);
             return (1);
         }
         free(moves);
         moves = get_next_line(0);
     }
-    if (ft_is_sorted(head))
+    if (ft_is_sorted(head_A))
     {
-        ft_clearlst(&head);
-	    ft_clearlst(&head_b);
+        ft_clearlst(&head_A);
+	    ft_clearlst(&head_B);
         write(1, "OK\n", 3);
         return (0);
     }
     write(1, "KO\n", 3);
-    ft_clearlst(&head);
-	ft_clearlst(&head_b);
+    ft_clearlst(&head_A);
+	ft_clearlst(&head_B);
     return (1);
 }
