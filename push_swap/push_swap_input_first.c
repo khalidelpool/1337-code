@@ -93,7 +93,6 @@ t_stack	*parser(int i, int ac, char **av, t_stack *head)
 {
 	char	**numbers;
 	long	temp;
-	int		*content;
 	int		j;
 
 	while (i < ac)

@@ -9,20 +9,18 @@ object = $(source:.c=.o)
 bonus_source = checker.c $(shared_files) get_next_line.c get_next_line_utils.c
 bonus_object = $(bonus_source:.c=.o)
 
-libft = -L./libft -lft
-
-FLAGS = #-Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 .PHONY: all clean fclean re
 
 all: $(NAME)
 
 $(NAME): $(object)
-	gcc $(object) -o $(NAME)
+	cc $(object) -o $(NAME)
 
 bonus: $(bonus_object)
 	touch bonus
-	gcc $(bonus_object) -o $(BONUS_NAME)
+	cc $(bonus_object) -o $(BONUS_NAME)
 
 clean: 
 	rm -f $(object) $(bonus_object)
