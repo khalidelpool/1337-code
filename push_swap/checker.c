@@ -45,7 +45,7 @@ int checker_moves(char *move, stack **head_A, stack **head_B)
 int main(int ac, char **av)
 {
 	stack *head_A;
-	stack *head_B = NULL;
+	stack *head_B;
     char *moves;
 
 	if (ac < 2)
