@@ -89,7 +89,7 @@ stack *parser(int i, int ac, char **av, stack *head)
 	{
 		numbers = ft_split(av[i], ' ');
 		if (numbers[0] == NULL)
-			return (write(2, "Error\n", 6), NULL);
+			(write(2, "Error\n", 6), exit(0));
 		j = 0;
 		while (numbers[j])
 		{
@@ -97,7 +97,7 @@ stack *parser(int i, int ac, char **av, stack *head)
 			if (temp == MAX || ft_lstcompare(head, (int)temp))
 			{
 				free_arr(&numbers), ft_clearlst(&head);
-				return (write(2, "Error\n", 6), NULL);
+					(write(2, "Error\n", 6), exit(0));
 			}
 			if ((j++, ft_add_backlst(&head, (int)temp)))
 				free_arr(&numbers), ft_clearlst(&head), exit(1);
