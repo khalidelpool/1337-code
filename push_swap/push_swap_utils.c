@@ -1,11 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 16:01:26 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/01/24 16:04:16 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "push_swap.h"
 
-int ft_index_max(stack *head, int choice)
+int	ft_index_max(t_stack *head, int choice)
 {
-	int index;
-	int max;
-	int i;
-	stack *curr;
+	int		index;
+	int		max;
+	int		i;
+	t_stack	*curr;
 
 	curr = head;
 	index = 0;
@@ -24,20 +35,21 @@ int ft_index_max(stack *head, int choice)
 	return (index);
 }
 
-int ft_target(int number, stack **head_B, int choice)
+int	ft_target(int number, t_stack **head_B, int choice)
 {
-	stack *curr;
-	int target;
-	int index;
-	int i;
-	
+	t_stack	*curr;
+	int		target;
+	int		index;
+	int		i;
+
 	i = 0;
 	curr = *head_B;
 	index = -1;
 	target = INT_MIN + choice;
-	while(curr != NULL)
+	while (curr != NULL)
 	{
-		if ((!choice && number > curr->number && curr->number >= target) || (choice && number < curr->number && curr->number <= target))
+		if ((!choice && number > curr->number && curr->number >= target)
+			|| (choice && number < curr->number && curr->number <= target))
 		{
 			target = curr->number;
 			index = i;
@@ -50,14 +62,14 @@ int ft_target(int number, stack **head_B, int choice)
 	return (index);
 }
 
-int min(int a, int b)
+int	min(int a, int b)
 {
 	if (a >= b)
 		return (b);
 	return (a);
 }
 
-void old_moves(int instruction, int *last_move, int new)
+void	old_moves(int instruction, int *last_move, int new)
 {
 	if (instruction == 1)
 		write(1, "sa\n", 3);
@@ -78,16 +90,16 @@ void old_moves(int instruction, int *last_move, int new)
 	*last_move = new;
 }
 
-void moves(int choice, int operation, int *last_move)
+void	moves(int choice, int operation, int *last_move)
 {
 	if (!choice && operation == 3 && *last_move == 6)
-		write(1, "rr\n", 3), old_moves(0, last_move, 0);
+		(write(1, "rr\n", 3), old_moves(0, last_move, 0));
 	else if (choice && operation == 3 && *last_move == 5)
-		write(1, "rr\n", 3), old_moves(0, last_move, 0);
+		(write(1, "rr\n", 3), old_moves(0, last_move, 0));
 	else if (!choice && operation == 4 && *last_move == 8)
-		write(1, "rrr\n", 4), old_moves(0, last_move, 0);
+		(write(1, "rrr\n", 4), old_moves(0, last_move, 0));
 	else if (choice && operation == 4 && *last_move == 7)
-		write(1, "rrr\n", 4), old_moves(0, last_move, 0);
+		(write(1, "rrr\n", 4), old_moves(0, last_move, 0));
 	else if (!choice && operation == 1)
 		old_moves(*last_move, last_move, 1);
 	else if (choice && operation == 1)

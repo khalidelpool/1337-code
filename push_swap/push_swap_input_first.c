@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap_input_first.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 15:47:52 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/01/24 15:53:46 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "push_swap.h"
 
 void	*ft_calloc(size_t nmemb, size_t size)
@@ -41,7 +52,7 @@ static int	count_words(const char *str, char c, int i)
 
 char	**free_arr(char ***ptr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while ((*ptr)[i] != NULL)
@@ -71,19 +82,19 @@ char	**ft_split(const char *s, char c)
 			j++;
 		ptr[k] = ft_substr(s, i, j);
 		if (!ptr[k])
-			free_arr(&ptr), exit(1);
+			(free_arr(&ptr), exit(1));
 		i = i + j;
 		k++;
 	}
 	return ((ptr));
 }
 
-stack *parser(int i, int ac, char **av, stack *head)
+t_stack	*parser(int i, int ac, char **av, t_stack *head)
 {
-	int j;
-	long temp;
-	char **numbers;
-	int *content;
+	char	**numbers;
+	long	temp;
+	int		*content;
+	int		j;
 
 	while (i < ac)
 	{
@@ -96,13 +107,13 @@ stack *parser(int i, int ac, char **av, stack *head)
 			temp = ft_atoy(numbers[j], 0, 1);
 			if (temp == MAX || ft_lstcompare(head, (int)temp))
 			{
-				free_arr(&numbers), ft_clearlst(&head);
-					(write(2, "Error\n", 6), exit(0));
+				(free_arr(&numbers), ft_clearlst(&head));
+				(write(2, "Error\n", 6), exit(0));
 			}
 			if ((j++, ft_add_backlst(&head, (int)temp)))
-				free_arr(&numbers), ft_clearlst(&head), exit(1);
+				(free_arr(&numbers), ft_clearlst(&head), exit(1));
 		}
-		free_arr(&numbers), i++;
+		(free_arr(&numbers), i++);
 	}
 	return (head);
 }

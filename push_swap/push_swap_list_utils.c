@@ -1,33 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap_list_utils.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 15:44:30 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/01/24 16:39:51 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "push_swap.h"
 
-// not needed
-void f(int content)
+int	ft_is_sorted(t_stack *head)
 {
-	printf("content is: %d\n", content);
-}
+	int	last;
 
-void	ft_iterlst(stack *lst, void (*f)(int))
-{
-	stack	*curr;
-
-	if (!f)
-		return ;
-	curr = lst;
-	while (curr != NULL)
-	{
-		f(curr->number);
-		curr = curr->next;
-	}
-}
-// end of not needed
-
-
-
-int		ft_is_sorted(stack *head)
-{
-	int last;
-
-	last = -2147483648;
+	last = INT_MIN;
 	while (head != NULL)
 	{
 		if (last > head->number)
@@ -38,12 +26,12 @@ int		ft_is_sorted(stack *head)
 	return (1);
 }
 
-int	ft_add_backlst(stack **lst, int content)
+int	ft_add_backlst(t_stack **lst, int content)
 {
-	stack	*last;
-	stack *new;
+	t_stack	*last;
+	t_stack	*new;
 
-	new = malloc(sizeof(stack));
+	new = malloc(sizeof(t_stack));
 	if (new == NULL)
 		return (1);
 	new->number = content;
@@ -65,9 +53,9 @@ int	ft_add_backlst(stack **lst, int content)
 	return (0);
 }
 
-int ft_lstcompare(stack *lst, int to_compare)
+int	ft_lstcompare(t_stack *lst, int to_compare)
 {
-	stack	*curr;
+	t_stack	*curr;
 
 	curr = lst;
 	while (curr != NULL)
@@ -79,9 +67,10 @@ int ft_lstcompare(stack *lst, int to_compare)
 	return (0);
 }
 
-int ft_sizelst(stack *node)
+int	ft_sizelst(t_stack *node)
 {
-	int size;
+	int	size;
+
 	if (!node)
 		return (0);
 	size = 0;
@@ -93,10 +82,10 @@ int ft_sizelst(stack *node)
 	return (size);
 }
 
-void ft_clearlst(stack **lst)
+void	ft_clearlst(t_stack **lst)
 {
-	stack	*curr;
-	stack	*temp;
+	t_stack	*curr;
+	t_stack	*temp;
 
 	if (!lst)
 		return ;

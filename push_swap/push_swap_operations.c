@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap_operations.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 15:54:15 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/01/24 16:00:17 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "push_swap.h"
 
-void ft_swap(stack **head)
+void	ft_swap(t_stack **head)
 {
-	stack *temp;
+	t_stack	*temp;
 
-	if (!head || !(*head) || !((*head)->next)) // at least 2 nodes
+	if (!head || !(*head) || !((*head)->next))
 		return ;
 	temp = (*head)->next->next;
 	(*head)->next->next = (*head);
@@ -12,9 +23,10 @@ void ft_swap(stack **head)
 	(*head)->next->next = temp;
 }
 
-void ft_push(stack **src, stack **dest)
+void	ft_push(t_stack **src, t_stack **dest)
 {
-	stack *temp;
+	t_stack	*temp;
+
 	if (!src || !dest || !(*src))
 		return ;
 	temp = *dest;
@@ -23,12 +35,12 @@ void ft_push(stack **src, stack **dest)
 	(*dest)->next = temp;
 }
 
-void ft_rot(stack **head)
+void	ft_rot(t_stack **head)
 {
-	stack *temp;
-	stack *curr;
+	t_stack	*temp;
+	t_stack	*curr;
 
-	if (!head || !(*head) || !((*head)->next)) // at least 2 nodes
+	if (!head || !(*head) || !((*head)->next))
 		return ;
 	temp = *head;
 	*head = (*head)->next;
@@ -41,11 +53,11 @@ void ft_rot(stack **head)
 	curr->next = temp;
 }
 
-void ft_revrot(stack **head)
+void	ft_revrot(t_stack **head)
 {
-	stack *curr;
+	t_stack	*curr;
 
-	if (!head || !(*head) || !((*head)->next)) // at least 2 nodes
+	if (!head || !(*head) || !((*head)->next))
 		return ;
 	curr = *head;
 	while (curr->next->next != NULL)
@@ -57,26 +69,28 @@ void ft_revrot(stack **head)
 	curr->next = NULL;
 }
 
-void ft_sort3(stack **head, int *last_move)
+void	ft_sort3(t_stack **head, int *last_move)
 {
-	int index;
-	int size;
+	int	index;
+	int	size;
 
 	size = ft_sizelst(*head);
-	index = ft_index_max(*head, -1); // -1 meaning index of the smallest
+	index = ft_index_max(*head, -1);
 	if (index == 2)
 	{
 		if ((*head)->number > (*head)->next->number)
-			ft_swap(head), moves(0, 1, last_move);
-		ft_revrot(head), moves(0, 4, last_move);
+			(ft_swap(head), moves(0, 1, last_move));
+		(ft_revrot(head), moves(0, 4, last_move));
 	}
 	else if (index == 1 && size == 3)
 	{
 		if ((*head)->number > (*head)->next->next->number)
-			ft_rot(head), moves(0, 3, last_move);
+			(ft_rot(head), moves(0, 3, last_move));
 		else
-			ft_swap(head), moves(0, 1, last_move);
+			(ft_swap(head), moves(0, 1, last_move));
 	}
-	else if(index == 0 && size == 3 && (*head)->next->number > (*head)->next->next->number)
-		ft_revrot(head), ft_swap(head), moves(0, 4, last_move), moves(0, 1, last_move);
+	else if (index == 0 && size == 3
+		&& (*head)->next->number > (*head)->next->next->number)
+		(ft_revrot(head), ft_swap(head),
+			moves(0, 4, last_move), moves(0, 1, last_move));
 }
