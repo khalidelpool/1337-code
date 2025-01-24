@@ -14,7 +14,6 @@
 
 # include "get_next_line.h"
 # include <limits.h>
-# include <stdio.h>
 # define MAX 2147483648
 
 typedef struct s_stack
