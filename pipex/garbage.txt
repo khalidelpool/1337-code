@@ -1,0 +1,23 @@
+int id = fork();
+	if (id == 0)
+	{
+		execl("/usr/bin/echo", "/usr/bin/echo", "Hello world!", NULL);
+	}
+	else
+	{
+		wait(NULL);
+		printf("what's up\n");
+		fflush(stdout);
+		int fd = open("output.txt", O_WRONLY | O_CREAT, 0777);
+		dup2(fd, 1);
+		close(fd);
+		printf("what's up\n");
+	}
+
+
+
+
+		char str[39] = {0};
+		read(pipe_fd[0], str, 38);
+		int outfile = open("outfile", O_WRONLY | O_CREAT, 0777);
+		write(outfile, &str, 38);
