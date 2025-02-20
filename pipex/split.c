@@ -9,6 +9,24 @@ void ft_putstr(char *str, int fd)
 	}
 }
 
+int at(int i, int state, int wr)
+{
+    return ((((i + state) % 2) * 2) + wr);
+}
+
+char	*get_path(char **envp)
+{
+	int i;
+
+    i = 0;
+	while (envp[i])
+	{
+		if (!ft_strncmp("PATH=", envp[i], 5))
+			return (&envp[i][5]);
+		i++;
+	}
+}
+
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	unsigned char	*source;
@@ -142,6 +160,18 @@ static int	count_words(const char *str, char c, int i)
 	return (((n)));
 }
 
+int arr_size(char **ptr)
+{
+	int size;
+
+	size = 0;
+	if (!ptr)
+		return (0);
+	while(ptr[size])
+		size++;
+	return (size);
+}
+
 void free_arr(char ***ptr)
 {
 	int	i;
@@ -153,31 +183,43 @@ void free_arr(char ***ptr)
 	return ;
 }
 
-char	*ft_strjoin_px(char *str, char *buff, int choice)
+void free_size(char ***ptr, int size)
+{
+	int	i;
+
+	i = 0;
+	while (size--)
+	{
+		if (ptr[0][i])
+			free(ptr[0][i]);
+		i++;
+	}
+	free(*ptr);
+	return ;
+}
+
+char	**ft_strjoin_px(char **str, char *buff, int choice)
 {
 	char	*result;
 	int		len1;
 	int		len2;
 
-	if (!str)
-		str = ft_strdup("");
-	len1 = ft_strlen(str);
+	if (!str || !(*str) || !buff)
+		return (NULL);
+	len1 = ft_strlen(*str);
 	len2 = ft_strlen(buff);
 	result = malloc((len1 + len2 + 1) * sizeof(char));
 	if (result == NULL)
-	{
-		free(str);
-		free(buff);
 		return (NULL);
-	}
-	ft_memcpy(result, str, len1);
+	ft_memcpy(result, *str, len1);
 	ft_memcpy(result + len1, buff, len2);
 	result[len1 + len2] = 0;
 	if (choice == 1 || choice == 3)
-		free(str);
+		free(*str);
 	if (choice == 2 || choice == 3)
 		free(buff);
-	return (result);
+	*str = result;
+	return (str);
 }
 
 char	**ft_split(const char *s, char c)
