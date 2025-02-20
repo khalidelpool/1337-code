@@ -1,0 +1,16 @@
+    void *mlx;
+    void *mlx_window;
+
+    srand(time(NULL));
+    mlx = mlx_init();
+    mlx_window = mlx_new_window(mlx, WIDTH, HEIGHT, "My First Window!");
+    
+    for(int y = HEIGHT * 0.1; y < HEIGHT * 0.9; y++)
+    {
+        for(int x = WIDTH * 0.1; x < WIDTH * 0.9; x++)
+        {
+            mlx_pixel_put(mlx, mlx_window, x, y, rand() % 0x1000000);
+        }
+    }
+    mlx_string_put(mlx, mlx_window, WIDTH * 0.8, HEIGHT * 0.95, 0xffffff, "My pollock");
+    mlx_loop(mlx);
