@@ -210,3 +210,56 @@ int main()
     mlx_key_hook(var.win, key_hook, &var);
     mlx_loop(var.mlx);
 }
+
+int key_hook(int keycode, t_vars *vars)
+{
+	printf("the keycode is: %d, the char is: %c\n", keycode, keycode);
+    if ((keycode == 'w' || keycode == 65362) && (vars->y) > 45)
+        vars->y-= vars->spider.img_width;
+    else if ((keycode == 'a' || keycode == 65361) && (vars->x) > 45)
+        vars->x-= vars->spider.img_height;
+    else if ((keycode == 's' || keycode == 65364) && (vars->y + vars->spider.img_width) < WIDTH - 45)
+        vars->y+= vars->spider.img_width;
+    else if ((keycode == 'd' || keycode == 65363) && (vars->x + vars->spider.img_height) < HEIGHT- 45)
+        vars->x+= vars->spider.img_height;
+    else   
+        return (1);
+    mlx_put_image_to_window(vars->mlx, vars->win, vars->buff.img, 0, 0);
+    draw_obstacle(map, vars);
+    mlx_put_image_to_window(vars->mlx, vars->win, vars->spider.img, vars->x, vars->y);
+    // mlx_pixel_put(vars->mlx, vars->win, vars->x, vars->y, 0);
+    // my_mlx_pixel_put(&vars->buff, vars->x, vars->y, 0);
+    // mlx_put_image_to_window(vars->mlx, vars->win, vars->buff.img, 0, 0);
+	return (0);
+}
+
+char *map[] = { "111111111111111111",
+                "101000111111111111",
+                "101101100000000001",
+                "100000000111111101",
+                "111111111100000101",
+                "100000000001111101",
+                "101111111111000001",
+                "101111111111111101",
+                "100000000000000001",
+                "111111111111111111", NULL};
+
+int key_hook(int keycode, t_vars *vars)
+{
+	printf("the keycode is: %d, the char is: %c\n", keycode, keycode);
+    if ((keycode == 'w' || keycode == 65362) && !(vars->map[vars->y - 1][vars->x] == '1' || (vars->map[vars->y - 1][vars->x] == 'E' && find_c(vars, 'c', 0))))
+        vars->y--;
+    else if ((keycode == 'a' || keycode == 65361) && !(vars->map[vars->y][vars->x - 1] == '1' || (vars->map[vars->y][vars->x - 1] == 'E' && find_c(vars, 'c', 0))))
+        vars->x--;
+    else if ((keycode == 's' || keycode == 65364) && !(vars->map[vars->y + 1][vars->x] == '1' || (vars->map[vars->y + 1][vars->x] == 'E' && find_c(vars, 'c', 0))))
+        vars->y++;
+    else if ((keycode == 'd' || keycode == 65363) && !(vars->map[vars->y][vars->x + 1] == '1' || (vars->map[vars->y][vars->x + 1] == 'E' && find_c(vars, 'c', 0))))
+        vars->x++;
+    else   
+        return (1);
+    if (vars->map[vars->y][vars->x] != 'E')
+        vars->map[vars->y][vars->x] = 'P';
+    draw_obstacle(vars);
+    // mlx_put_image_to_window(vars->mlx, vars->win, vars->plyr.img, vars->x * 45, vars->y * 45);
+	return (0);
+}
