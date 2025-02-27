@@ -3,6 +3,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define load		mlx_xpm_file_to_image
+#define XK_Left		0xff51  /* Move left, left arrow */
+#define XK_Up		0xff52  /* Move up, up arrow */
+#define XK_Right	0xff53  /* Move right, right arrow */
+#define XK_Down		0xff54  /* Move down, down arrow */
+
+typedef struct	s_img {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+    int     wdt;
+    int     hgt;
+}				t_img;
+
+typedef struct	s_vars {
+    void	*mlx;
+    void	*win;
+    t_img   bkgr;
+    t_img   rock;
+    t_img   plyr;
+    t_img   food;
+    t_img   exit;
+    char    *map[33];
+    int     x;
+    int     y;
+    int     wdt;
+    int     hgt;
+    int     count;
+}				t_vars;
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
@@ -146,4 +178,51 @@ void	ft_bzero(void *s, size_t n)
 	i = 0;
 	while (i < n)
 		ptr[i++] = '\0';
+}
+
+void str_replace(char *str, char c, char n)
+{
+    int i = 0;
+
+    while (str[i])
+    {
+        if (str[i] == c)
+            str[i] = n;
+        i++;
+    }
+}
+
+int find(char **map, char c)
+{
+    for (int y = 0; map[y]; y++)
+    {
+        for(int x = 0; map[y][x]; x++)
+        {
+            if (map[y][x] == c)
+            {
+                return (1);
+            }
+        }
+    }
+    return (0);
+}
+
+int find_c(t_vars *var, char c, int change)
+{
+    for (int y = 0; var->map[y]; y++)
+    {
+        for(int x = 0; var->map[y][x]; x++)
+        {
+            if (var->map[y][x] == c)
+            {
+                if (change)
+                {
+                    var->y = y;
+                    var->x = x;
+                }
+                return (1);
+            }
+        }
+    }
+    return (0);
 }
