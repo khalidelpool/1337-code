@@ -136,3 +136,14 @@ char	*ft_strjoin_px(char *str, char *buff, int choice)
 		free(buff);
 	return (result);
 }
+
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*ptr;
+	size_t			i;
+
+	ptr = s;
+	i = 0;
+	while (i < n)
+		ptr[i++] = '\0';
+}
