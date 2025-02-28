@@ -121,6 +121,7 @@ void update_map(t_vars *vars, int y, int x)
         }
         printf("\n");
     }
+    printf("hey\n\n\n\n");
     draw_map(vars);
 }
 

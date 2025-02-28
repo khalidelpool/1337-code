@@ -82,6 +82,7 @@ void draw_map(t_vars *vars)
         }
     }
     mlx_string_put(vars->mlx, vars->win, 22, 26, 0xffffffff, ft_strjoin_px("moves: ", ft_itoa(vars->count), 2));
+    printf("\n");
 }
 
 void update_map(t_vars *vars, int y, int x)

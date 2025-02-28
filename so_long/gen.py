@@ -70,6 +70,6 @@ def save_map_to_file(map_data, filename="map.ber"):
     print(f"Map saved to {filename}")
 
 # Generate and save map
-width, height = random.randint(5, 23), random.randint(5, 24)  # Random dimensions within max
+width, height = random.randint(5, 42), random.randint(5, 23)  # Random dimensions within max
 map_data = generate_map(width, height)
 save_map_to_file(map_data)
