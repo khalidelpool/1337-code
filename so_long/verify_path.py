@@ -57,7 +57,7 @@ try:
 				q.append(next)
 				visited.append(next)
 				print('in')
-				# map[next[0]][next[1]] = '1'
+				map[next[0]][next[1]] = '1'
 				
 		print(q)
 		print(f'node is: {node}')

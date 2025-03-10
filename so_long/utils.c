@@ -9,6 +9,12 @@
 #define XK_Right	0xff53  /* Move right, right arrow */
 #define XK_Down		0xff54  /* Move down, down arrow */
 
+typedef struct s_queue
+{
+	int				pos[2];
+	struct s_queue	*next;
+}	t_queue;
+
 typedef struct	s_img {
 	void	*img;
 	char	*addr;
@@ -33,6 +39,9 @@ typedef struct	s_vars {
     int     wdt;
     int     hgt;
     int     count;
+	int		pos[2];
+	t_queue *queue;
+    t_queue *visited;
 }				t_vars;
 
 size_t	ft_strlen(const char *s)
@@ -192,22 +201,7 @@ void str_replace(char *str, char c, char n)
     }
 }
 
-int find(char **map, char c)
-{
-    for (int y = 0; map[y]; y++)
-    {
-        for(int x = 0; map[y][x]; x++)
-        {
-            if (map[y][x] == c)
-            {
-                return (1);
-            }
-        }
-    }
-    return (0);
-}
-
-int find_c(t_vars *var, char c, int change)
+int	*find_c(t_vars *var, char c, int *pos)
 {
     for (int y = 0; var->map[y]; y++)
     {
@@ -215,14 +209,103 @@ int find_c(t_vars *var, char c, int change)
         {
             if (var->map[y][x] == c)
             {
-                if (change)
+                if (pos != NULL)
                 {
-                    var->y = y;
-                    var->x = x;
+                    pos[0] = x;
+                    pos[1] = y;
+					return (pos);
                 }
-                return (1);
+				return (var->pos);
             }
         }
     }
-    return (0);
+    return (NULL);
 }
+
+int	put(t_queue **queue, int x, int y)
+{
+	t_queue	*last;
+	t_queue	*new;
+
+	if (queue == NULL)
+		return (0);
+	new = malloc(sizeof(t_queue));
+	if (new == NULL)
+		return (1);
+	new->pos[0] = x;
+	new->pos[1] = y;
+	new->next = NULL;
+	last = *queue;
+	if (*queue == NULL)
+	{
+		*queue = new;
+		return (0);
+	}
+	while (last->next != NULL)
+	{
+		last = last->next;
+	}
+	last->next = new;
+	new->next = NULL;
+	return (0);
+}
+
+t_queue	*pop(t_queue **queue)
+{
+	t_queue *node;
+
+	if (queue == NULL || (*queue) == NULL)
+		return (NULL);
+	node = *queue;
+	*queue = node->next;
+	return (node);
+}
+
+void f(int *pos)
+{
+	printf("(%d, %d)\n", pos[0], pos[1]);
+}
+
+void	ft_lstiter(t_queue *queue, void (*f)(int *))
+{
+	t_queue	*curr;
+
+	if (!f)
+		return ;
+	curr = queue;
+	while (curr != NULL)
+	{
+		f(curr->pos);
+		curr = curr->next;
+	}
+}
+
+void	q_clear(t_queue **queue)
+{
+	t_queue	*curr;
+	t_queue	*temp;
+
+	if (!queue)
+		return ;
+	curr = *queue;
+	while (curr != NULL)
+	{
+		temp = curr;
+		curr = curr->next;
+		free(temp);
+	}
+	*queue = NULL;
+}
+
+// int main(){
+// 	t_queue *head = NULL;
+// 	put(&head, 3, 2);
+// 	put(&head, 5, 7);
+// 	pop(&head);
+// 	pop(&head);
+// 	// pop(&head);
+// 	// pop(&head);
+// 	// pop(&head);
+// 	ft_lstiter(head, f);
+// 	// printf("hello\n");
+// }

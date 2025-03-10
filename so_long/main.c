@@ -10,6 +10,72 @@
 #include "get_next_line_utils.c"
 #include "utils.c"
 
+int in_list(t_queue *queue, int *pos)
+{
+    while (queue)
+    {
+        if (queue->pos[0] == pos[0] && queue->pos[1] == pos[1])
+            return (1);
+        queue = queue->next;
+    }
+    return (0);
+}
+
+void next_to(t_vars *var, t_queue *node, int bros[5][2], int include_E)
+{
+    int moves[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int i = 0;
+    int j = 0;
+    int x;
+    int y;
+
+    while (i < 4)
+    {
+        x = node->pos[0] + moves[i][0];
+        y = node->pos[1] + moves[i][1];
+        if (x < var->hgt && y < var->wdt && x > -1 && y > -1)
+        {
+            if (var->map[y][x] != '1' && (var->map[y][x] != 'E' || !include_E))
+            {
+                bros[j][0] = x;
+                bros[j][1] = y;
+                j++;
+            }
+        }
+        i++;
+    }
+    bros[j][0] = -1;
+    free(node);
+}
+
+int check_path(t_vars *var, int include_E)
+{
+    t_queue *node;
+    int     bros[5][2];
+    int     i;
+
+    if (put(&var->queue, var->pos[0], var->pos[1])
+        || put(&var->visited, var->pos[0], var->pos[1]))
+        return (printf("malloc error"), 0);
+    while(var->queue != NULL)
+    {
+        i = 0;
+        node = pop(&var->queue);
+        next_to(var, node, bros, include_E);
+        while (bros[i][0] != -1)
+        {
+            if (!in_list(var->visited, bros[i])
+                && (put(&var->queue, bros[i][0], bros[i][1])
+                    || put(&var->visited, bros[i][0], bros[i][1])))
+                    return (printf("malloc error"), 0);
+            i++;
+        }
+    }
+    if (in_list(var->visited, find_c(var, 'E', bros[4])))
+        return (printf("valid\n"), q_clear(&var->queue), q_clear(&var->visited), 1);
+    return (printf("invalid\n"), q_clear(&var->queue), q_clear(&var->visited), 0);
+}
+
 void check_map(t_vars *var)
 {
 	int x;
@@ -28,8 +94,8 @@ void check_map(t_vars *var)
 		}
 		y++;
 	}
-	if (!find(var->map, 'C') || !find(var->map, 'E')
-		|| !find_c(var, 'P', 1)/*these 2 functs probably should be merged*/)
+	if (!find_c(var, 'C', NULL) || !find_c(var, 'E', NULL)
+		|| !find_c(var, 'P', var->pos)/*these 2 functs probably should be merged*/)
         (printf("invalide map file\n"), exit(1));
 }
 
@@ -54,76 +120,76 @@ void parse(t_vars *var, char *path)
 	}
 	var->map[var->wdt] = NULL;
 	check_map(var);
-	for (int y = 0; var->map[y]; y++)
-    {
-        for(int x = 0; var->map[y][x]; x++)
-        {
-            printf("%c", var->map[y][x]);
-        }
-		printf("\n");
-    }
+	// for (int y = 0; var->map[y]; y++)
+    // {
+    //     for(int x = 0; var->map[y][x]; x++)
+    //     {
+    //         printf("%c", var->map[y][x]);
+    //     }
+	// 	printf("\n");
+    // }
 }
 
-void draw_map(t_vars *vars)
+void draw_map(t_vars *var)
 {
-    mlx_put_image_to_window(vars->mlx, vars->win, vars->bkgr.img, 0, 0);
-    for(int y = 0; y < vars->wdt; y++)
+    mlx_put_image_to_window(var->mlx, var->win, var->bkgr.img, 0, 0);
+    for(int y = 0; y < var->wdt; y++)
     {
-        for(int x = 0; x < vars->hgt; x++)
+        for(int x = 0; x < var->hgt; x++)
         {
-            if (vars->map[y][x] == '1')
-                mlx_put_image_to_window(vars->mlx, vars->win, vars->rock.img, x * vars->rock.hgt, y * vars->rock.wdt);
-            else if (vars->map[y][x] == 'C')
-                mlx_put_image_to_window(vars->mlx, vars->win, vars->food.img, x * vars->food.hgt, y * vars->food.wdt);
-            else if (vars->map[y][x] == 'E')
-                mlx_put_image_to_window(vars->mlx, vars->win, vars->exit.img, x * vars->exit.hgt, y * vars->exit.wdt);
-            else if(vars->map[y][x] == 'P')
-                mlx_put_image_to_window(vars->mlx, vars->win, vars->plyr.img, x * vars->plyr.hgt, y * vars->plyr.wdt);
+            if (var->map[y][x] == '1')
+                mlx_put_image_to_window(var->mlx, var->win, var->rock.img, x * var->rock.hgt, y * var->rock.wdt);
+            else if (var->map[y][x] == 'C')
+                mlx_put_image_to_window(var->mlx, var->win, var->food.img, x * var->food.hgt, y * var->food.wdt);
+            else if (var->map[y][x] == 'E')
+                mlx_put_image_to_window(var->mlx, var->win, var->exit.img, x * var->exit.hgt, y * var->exit.wdt);
+            else if(var->map[y][x] == 'P')
+                mlx_put_image_to_window(var->mlx, var->win, var->plyr.img, x * var->plyr.hgt, y * var->plyr.wdt);
         }
     }
-    mlx_string_put(vars->mlx, vars->win, 22, 26, 0xffffffff, ft_strjoin_px("moves: ", ft_itoa(vars->count), 2));
-    printf("\n");
+    mlx_string_put(var->mlx, var->win, 22, 26, 0xffffffff, ft_strjoin_px("moves: ", ft_itoa(var->count), 2));
+    // printf("\n");
 }
 
-void update_map(t_vars *vars, int y, int x)
+void update_map(t_vars *var, int y, int x)
 {
-	if (vars->map[vars->y + y][vars->x + x] == '0'
-        || vars->map[vars->y + y][vars->x + x] == 'C')
+	if (var->map[var->pos[1] + y][var->pos[0] + x] == '0'
+        || var->map[var->pos[1] + y][var->pos[0] + x] == 'C')
     {
-        vars->map[vars->y][vars->x] = '0';
-        vars->map[vars->y + y][vars->x + x] = 'P';
-        vars->x += x;
-        vars->y += y;
-        if (vars->count == 2147483647)
+        var->map[var->pos[1]][var->pos[0]] = '0';
+        var->map[var->pos[1] + y][var->pos[0] + x] = 'P';
+        var->pos[0] += x;
+        var->pos[1] += y;
+        if (var->count == 2147483647)
             (/*function to clear var here*/printf("too much moves\n"), exit(0));
-        vars->count++;
+        var->count++;
     }
-    else if(vars->map[vars->y + y][vars->x + x] == 'E')
+    else if(var->map[var->pos[1] + y][var->pos[0] + x] == 'E')
     {
-        if (!find_c(vars, 'C', 0))
+        if (!find_c(var, 'C', NULL))
 			(/*function to clear var here*/printf("You Won!\n"), exit(0));
     }
-    for (int y = 0; vars->map[y]; y++)
-    {
-        for(int x = 0; vars->map[y][x]; x++)
-        {
-            printf("%c", vars->map[y][x]);
-        }
-        printf("\n");
-    }
-    draw_map(vars);
+    // for (int y = 0; var->map[y]; y++)
+    // {
+    //     for(int x = 0; var->map[y][x]; x++)
+    //     {
+    //         printf("%c", var->map[y][x]);
+    //     }
+    //     printf("\n");
+    // }
+    draw_map(var);
 }
 
-int key_hook(int keysym, t_vars *vars)
+int key_hook(int keysym, t_vars *var)
 {
     if (keysym == 'w' || keysym == XK_Up)
-        update_map(vars, -1, 0);
+        update_map(var, -1, 0);
     else if (keysym == 'a' || keysym == XK_Left)
-        update_map(vars, 0, -1);
+        update_map(var, 0, -1);
     else if (keysym == 's' || keysym == XK_Down)
-        update_map(vars, 1, 0);
+        update_map(var, 1, 0);
     else if (keysym == 'd' || keysym == XK_Right)
-        update_map(vars, 0, 1);
+        update_map(var, 0, 1);
     else
         return (1); // this return should be checked
 	return (0);
@@ -132,11 +198,15 @@ int key_hook(int keysym, t_vars *vars)
 int main(int ac, char **av)
 {
 	t_vars var;
+    t_queue node;
+    t_queue *neys;
 
 	if (ac != 2)
         (printf("usage: program *.ber\n"), exit(0));
 	ft_bzero(&var, sizeof(t_vars));
     parse(&var, av[1]);
+    printf("width is: %d, height is: %d\n", var.wdt, var.hgt);
+    check_path(&var, 1);
 	var.mlx = mlx_init();
 
     var.bkgr.img = load(var.mlx, "bkgr.xpm", &var.bkgr.wdt, &var.bkgr.hgt);
