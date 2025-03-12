@@ -242,6 +242,12 @@ int key_hook(int keysym, t_vars *var)
 	return (0);
 }
 
+int	render_next_frame(t_vars *var)
+{
+    var->random++;
+    printf("the number is: %d\n", var->random);
+}
+
 int main(int ac, char **av)
 {
 	t_vars var;
@@ -266,5 +272,6 @@ int main(int ac, char **av)
 
 	draw_map(&var);
 	mlx_key_hook(var.win, key_hook, &var);
+    mlx_loop_hook(var.mlx, render_next_frame, &var);
     mlx_loop(var.mlx);
 }

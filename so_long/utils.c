@@ -39,6 +39,7 @@ typedef struct	s_vars {
     int     hgt;
     int     count;
 	int		pos[2];
+	int		random;
 	t_queue *queue;
     t_queue *visited;
 }				t_vars;
