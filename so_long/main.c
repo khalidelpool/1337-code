@@ -48,6 +48,33 @@ void next_to(t_vars *var, t_queue *node, int bros[5][2], int include_E)
     free(node);
 }
 
+int ate_all(t_vars *var)
+{
+    int pos[2];
+
+    pos[1] = 0;
+    while (var->map[pos[1]])
+    {
+        pos[0] = 0;
+        // printf("in\n");
+        while (var->map[pos[1]][pos[0]])
+        {
+            if (var->map[pos[1]][pos[0]] == 'C' && !in_list(var->visited, pos))
+            {
+                // ft_lstiter(var->visited, f);
+                printf("x is: %d, y is: %d\n", pos[0], pos[1]);
+                return (0);
+            }
+            pos[0]++;
+        }
+        pos[1]++;
+    }
+    
+    q_clear(&var->visited);
+    q_clear(&var->queue);
+    return (1);
+}
+
 int check_path(t_vars *var, int include_E)
 {
     t_queue *node;
@@ -64,14 +91,28 @@ int check_path(t_vars *var, int include_E)
         next_to(var, node, bros, include_E);
         while (bros[i][0] != -1)
         {
-            if (!in_list(var->visited, bros[i])
-                && (put(&var->queue, bros[i][0], bros[i][1])
-                    || put(&var->visited, bros[i][0], bros[i][1])))
-                    return (printf("malloc error"), 0);
+            if (!in_list(var->visited, bros[i]))
+            {
+                put(&var->queue, bros[i][0], bros[i][1]);
+                put(&var->visited, bros[i][0], bros[i][1]);
+                /*if problem do return (printf("malloc error"), 0);*/
+                // var->map[bros[i][1]][bros[i][0]] = '1';
+            }
             i++;
         }
+        // for (int y = 0; var->map[y]; y++)
+        // {
+        //     for(int x = 0; var->map[y][x]; x++)
+        //     {
+        //         printf("%c", var->map[y][x]);
+        //     }
+        //     printf("\n");
+        // }
+        // printf("------------------------------------\n");
+        // sleep(1);
     }
-    if (in_list(var->visited, find_c(var, 'E', bros[4])))
+    if ((!include_E && ate_all(var) && check_path(var, 1))
+        || (include_E && printf("in list returned %d\n", in_list(var->visited, find_c(var, 'E', bros[4])))))
         return (printf("valid\n"), q_clear(&var->queue), q_clear(&var->visited), 1);
     return (printf("invalid\n"), q_clear(&var->queue), q_clear(&var->visited), 0);
 }
@@ -143,8 +184,10 @@ void draw_map(t_vars *var)
                 mlx_put_image_to_window(var->mlx, var->win, var->food.img, x * var->food.hgt, y * var->food.wdt);
             else if (var->map[y][x] == 'E')
                 mlx_put_image_to_window(var->mlx, var->win, var->exit.img, x * var->exit.hgt, y * var->exit.wdt);
-            else if(var->map[y][x] == 'P')
+            else if (var->map[y][x] == 'P')
                 mlx_put_image_to_window(var->mlx, var->win, var->plyr.img, x * var->plyr.hgt, y * var->plyr.wdt);
+            else if (var->map[y][x] == 'V')
+                mlx_put_image_to_window(var->mlx, var->win, var->vill.img, x * var->vill.hgt, y * var->vill.wdt);
         }
     }
     mlx_string_put(var->mlx, var->win, 22, 26, 0xffffffff, ft_strjoin_px("moves: ", ft_itoa(var->count), 2));
@@ -168,6 +211,10 @@ void update_map(t_vars *var, int y, int x)
     {
         if (!find_c(var, 'C', NULL))
 			(/*function to clear var here*/printf("You Won!\n"), exit(0));
+    }
+    else if(var->map[var->pos[1] + y][var->pos[0] + x] == 'V')
+    {
+			(/*function to clear var here*/printf("You Lost!\n"), exit(0));
     }
     // for (int y = 0; var->map[y]; y++)
     // {
@@ -206,7 +253,7 @@ int main(int ac, char **av)
 	ft_bzero(&var, sizeof(t_vars));
     parse(&var, av[1]);
     printf("width is: %d, height is: %d\n", var.wdt, var.hgt);
-    check_path(&var, 1);
+    check_path(&var, 0);
 	var.mlx = mlx_init();
 
     var.bkgr.img = load(var.mlx, "bkgr.xpm", &var.bkgr.wdt, &var.bkgr.hgt);
@@ -214,6 +261,7 @@ int main(int ac, char **av)
     var.food.img = load(var.mlx, "food.xpm", &var.food.wdt, &var.food.hgt);
     var.rock.img = load(var.mlx, "rock.xpm", &var.rock.wdt, &var.rock.hgt);
     var.exit.img = load(var.mlx, "exit.xpm", &var.exit.wdt, &var.exit.hgt);
+    var.vill.img = load(var.mlx, "vill.xpm", &var.vill.wdt, &var.vill.hgt);
 	var.win = mlx_new_window(var.mlx, var.hgt * var.plyr.wdt, var.wdt * var.plyr.wdt, "Main"); // update this to the size of map
 
 	draw_map(&var);

@@ -33,9 +33,8 @@ typedef struct	s_vars {
     t_img   plyr;
     t_img   food;
     t_img   exit;
+	t_img	vill;
     char    *map[33];
-    int     x;
-    int     y;
     int     wdt;
     int     hgt;
     int     count;
