@@ -21,7 +21,7 @@ int in_list(t_queue *queue, int *pos)
     return (0);
 }
 
-void next_to(t_vars *var, t_queue *node, int bros[5][2], int include_E)
+void next_to(t_vars *var, t_queue *node, int bros[5][2], int exclude_E)
 {
     int moves[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     int i = 0;
@@ -35,7 +35,7 @@ void next_to(t_vars *var, t_queue *node, int bros[5][2], int include_E)
         y = node->pos[1] + moves[i][1];
         if (x < var->hgt && y < var->wdt && x > -1 && y > -1)
         {
-            if (var->map[y][x] != '1' && (var->map[y][x] != 'E' || !include_E))
+            if (var->map[y][x] != '1' && (var->map[y][x] != 'E' || !exclude_E))
             {
                 bros[j][0] = x;
                 bros[j][1] = y;
@@ -75,7 +75,7 @@ int ate_all(t_vars *var)
     return (1);
 }
 
-int check_path(t_vars *var, int include_E)
+int check_path(t_vars *var, int exclude_E)
 {
     t_queue *node;
     int     bros[5][2];
@@ -88,7 +88,7 @@ int check_path(t_vars *var, int include_E)
     {
         i = 0;
         node = pop(&var->queue);
-        next_to(var, node, bros, include_E);
+        next_to(var, node, bros, exclude_E);
         while (bros[i][0] != -1)
         {
             if (!in_list(var->visited, bros[i]))
@@ -111,8 +111,8 @@ int check_path(t_vars *var, int include_E)
         // printf("------------------------------------\n");
         // sleep(1);
     }
-    if ((!include_E && ate_all(var) && check_path(var, 1))
-        || (include_E && printf("in list returned %d\n", in_list(var->visited, find_c(var, 'E', bros[4])))))
+    if ((exclude_E && ate_all(var) && check_path(var, 0))
+        || (!exclude_E && in_list(var->visited, find_c(var, 'E', bros[4]))))
         return (printf("valid\n"), q_clear(&var->queue), q_clear(&var->visited), 1);
     return (printf("invalid\n"), q_clear(&var->queue), q_clear(&var->visited), 0);
 }
@@ -253,7 +253,7 @@ int main(int ac, char **av)
 	ft_bzero(&var, sizeof(t_vars));
     parse(&var, av[1]);
     printf("width is: %d, height is: %d\n", var.wdt, var.hgt);
-    check_path(&var, 0);
+    check_path(&var, 1);
 	var.mlx = mlx_init();
 
     var.bkgr.img = load(var.mlx, "bkgr.xpm", &var.bkgr.wdt, &var.bkgr.hgt);
