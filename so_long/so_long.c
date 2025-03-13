@@ -85,7 +85,7 @@ int main(void)
 	t_data	img;
 	t_vars	vars;
 	void *image;
-    char *relative_path = "./grass.xpm";
+    char *relative_path = "./anim.xpm";
     int img_width;
     int img_height;
 	t_data background;
@@ -97,10 +97,12 @@ int main(void)
 	img.img = mlx_new_image(mlx, HEIGHT, WIDTH);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								&img.endian);
-
+	printf("the return is: %d\n", img.addr);
 	background.img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
+	printf("img is %d\n", background.img);
 	background.addr = mlx_get_data_addr(background.img, &background.bits_per_pixel, &background.line_length,
 								&background.endian);
+	printf("the return is: %d\n", background.addr);
     if (!background.img)
         return (1); // Handle failure if image loading fails
 
@@ -134,6 +136,5 @@ int main(void)
 	
 	// circle(&img);
     // mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-
     mlx_loop(mlx);
 }

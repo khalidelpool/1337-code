@@ -34,12 +34,16 @@ typedef struct	s_vars {
     t_img   food;
     t_img   exit;
 	t_img	vill;
+	t_img	anim;
+	t_img	fram;
     char    *map[33];
     int     wdt;
     int     hgt;
+	int		bksz;
     int     count;
 	int		pos[2];
 	int		random;
+	int		curr_frame;
 	t_queue *queue;
     t_queue *visited;
 }				t_vars;

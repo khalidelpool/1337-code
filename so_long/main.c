@@ -10,6 +10,22 @@
 #include "get_next_line_utils.c"
 #include "utils.c"
 
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
+}
+
+int     my_mlx_pixel_get(t_img *img, int x, int y)
+{
+	char	*dst;
+    
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	return (*(unsigned int*)dst);
+}
+
 int in_list(t_queue *queue, int *pos)
 {
     while (queue)
@@ -56,7 +72,6 @@ int ate_all(t_vars *var)
     while (var->map[pos[1]])
     {
         pos[0] = 0;
-        // printf("in\n");
         while (var->map[pos[1]][pos[0]])
         {
             if (var->map[pos[1]][pos[0]] == 'C' && !in_list(var->visited, pos))
@@ -179,19 +194,18 @@ void draw_map(t_vars *var)
         for(int x = 0; x < var->hgt; x++)
         {
             if (var->map[y][x] == '1')
-                mlx_put_image_to_window(var->mlx, var->win, var->rock.img, x * var->rock.hgt, y * var->rock.wdt);
+                mlx_put_image_to_window(var->mlx, var->win, var->rock.img, x * var->bksz, y * var->bksz);
             else if (var->map[y][x] == 'C')
-                mlx_put_image_to_window(var->mlx, var->win, var->food.img, x * var->food.hgt, y * var->food.wdt);
+                mlx_put_image_to_window(var->mlx, var->win, var->food.img, x * var->bksz, y * var->bksz);
             else if (var->map[y][x] == 'E')
-                mlx_put_image_to_window(var->mlx, var->win, var->exit.img, x * var->exit.hgt, y * var->exit.wdt);
+                mlx_put_image_to_window(var->mlx, var->win, var->exit.img, x * var->bksz, y * var->bksz);
             else if (var->map[y][x] == 'P')
-                mlx_put_image_to_window(var->mlx, var->win, var->plyr.img, x * var->plyr.hgt, y * var->plyr.wdt);
+                mlx_put_image_to_window(var->mlx, var->win, var->plyr.img, x * var->bksz, y * var->bksz);
             else if (var->map[y][x] == 'V')
-                mlx_put_image_to_window(var->mlx, var->win, var->vill.img, x * var->vill.hgt, y * var->vill.wdt);
+                mlx_put_image_to_window(var->mlx, var->win, var->vill.img, x * var->bksz, y * var->bksz);
         }
     }
     mlx_string_put(var->mlx, var->win, 22, 26, 0xffffffff, ft_strjoin_px("moves: ", ft_itoa(var->count), 2));
-    // printf("\n");
 }
 
 void update_map(t_vars *var, int y, int x)
@@ -242,10 +256,62 @@ int key_hook(int keysym, t_vars *var)
 	return (0);
 }
 
+void change_frame(t_vars *var)
+{
+    int pixel;
+    for (int y = 0; y < 45; y++)
+    {
+        for (int x = 0; x < 45; x++)
+        {
+            pixel = my_mlx_pixel_get(&var->anim, x + (var->curr_frame * 45), y);
+            my_mlx_pixel_put(&var->plyr, x, y, pixel);
+        }
+    }
+}
+// 2700213 updates every 60 sec
 int	render_next_frame(t_vars *var)
 {
+    if (var->random == 0)
+    {
+        if (var->curr_frame == 7)
+            var->curr_frame = 0;
+        else
+            var->curr_frame++;
+        change_frame(var);
+    }
     var->random++;
-    printf("the number is: %d\n", var->random);
+    if (var->random > 9000)
+        var->random = 0;
+    mlx_put_image_to_window(var->mlx, var->win, var->plyr.img, var->pos[0] * 45, var->pos[1] * 45);
+}
+
+void fill_img(t_vars *var, int color)
+{
+    for (int y = 0; y < var->bkgr.hgt; y++)
+    {
+        for (int x = 0; x < var->bkgr.wdt; x++)
+        {
+            my_mlx_pixel_put(&var->bkgr, x, y, color);
+        }
+    }
+}
+
+void init_textures(t_vars *var)
+{
+    var->bkgr.img = load(var->mlx, "bkgr.xpm", &var->bkgr.wdt, &var->bkgr.hgt);
+    var->food.img = load(var->mlx, "food.xpm", &var->bksz, &var->bksz);
+    var->rock.img = load(var->mlx, "rock.xpm", &var->bksz, &var->bksz);
+    var->exit.img = load(var->mlx, "exit.xpm", &var->bksz, &var->bksz);
+    var->vill.img = load(var->mlx, "vill.xpm", &var->bksz, &var->bksz);
+    var->plyr.img = mlx_new_image(var->mlx, var->bksz, var->bksz);
+    var->plyr.addr = mlx_get_data_addr(var->plyr.img, &var->plyr.bits_per_pixel, &var->plyr.line_length, &var->plyr.endian);
+    var->anim.img = load(var->mlx, "anim.xpm", &var->bksz, &var->bksz);
+    var->anim.addr = mlx_get_data_addr(var->anim.img, &var->anim.bits_per_pixel, &var->anim.line_length, &var->anim.endian);
+    if (!(var->bkgr.img && var->food.img && var->rock.img
+        && var->exit.img && var->vill.img && var->plyr.img
+        && var->plyr.addr && var->anim.img && var->anim.addr ))
+        (printf("should safely quit, some textures didnt load correctly\n"), exit(0));
+    change_frame(&var);
 }
 
 int main(int ac, char **av)
@@ -258,19 +324,11 @@ int main(int ac, char **av)
         (printf("usage: program *.ber\n"), exit(0));
 	ft_bzero(&var, sizeof(t_vars));
     parse(&var, av[1]);
-    printf("width is: %d, height is: %d\n", var.wdt, var.hgt);
     check_path(&var, 1);
 	var.mlx = mlx_init();
-
-    var.bkgr.img = load(var.mlx, "bkgr.xpm", &var.bkgr.wdt, &var.bkgr.hgt);
-    var.plyr.img = load(var.mlx, "plyr.xpm", &var.plyr.wdt, &var.plyr.hgt);
-    var.food.img = load(var.mlx, "food.xpm", &var.food.wdt, &var.food.hgt);
-    var.rock.img = load(var.mlx, "rock.xpm", &var.rock.wdt, &var.rock.hgt);
-    var.exit.img = load(var.mlx, "exit.xpm", &var.exit.wdt, &var.exit.hgt);
-    var.vill.img = load(var.mlx, "vill.xpm", &var.vill.wdt, &var.vill.hgt);
-	var.win = mlx_new_window(var.mlx, var.hgt * var.plyr.wdt, var.wdt * var.plyr.wdt, "Main"); // update this to the size of map
-
-	draw_map(&var);
+    init_textures(&var);
+	var.win = mlx_new_window(var.mlx, var.hgt * var.bksz, var.wdt * var.bksz, "Main"); // update this to the size of map
+    draw_map(&var);
 	mlx_key_hook(var.win, key_hook, &var);
     mlx_loop_hook(var.mlx, render_next_frame, &var);
     mlx_loop(var.mlx);
