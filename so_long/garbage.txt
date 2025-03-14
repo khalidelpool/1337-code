@@ -282,3 +282,32 @@ char **init_map() {
 
     return map;
 }
+
+
+// void fill_img(t_vars *var, int color)
+// {
+//     for (int y = 0; y < var->bkgr.hgt; y++)
+//     {
+//         for (int x = 0; x < var->bkgr.wdt; x++)
+//         {
+//             my_mlx_pixel_put(&var->bkgr, x, y, color);
+//         }
+//     }
+// }
+
+
+
+// 9941276
+// 2700213 updates every 60 sec
+
+11111111111111111111111
+1000VVVV1VVVVVVVVVVVVV1
+1C10VVVV1VVVVVV000VVVV1
+11V0VVVV1VVVVV001C1VVV1
+1VV0VVVV1VVVVV011111VV1
+1VV0VVVV1VVVVV0VVVVVVV1
+1VV00000E0000000VVVVVV1
+1VVVVVVV1VVVVVVPVVVVVV1
+1VVVVVVV1VVVVVVVVVVVVV1
+1VVVVVVV1VVVVVVVVVVVVV1
+11111111111111111111111

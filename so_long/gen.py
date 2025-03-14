@@ -1,5 +1,6 @@
 import random
 from collections import deque
+import sys
 
 def generate_map(width, height):
     if width < 5 or height < 5:
@@ -39,16 +40,44 @@ def generate_map(width, height):
             else:
                 map_grid[cy][cx] = '0'  # Reset if unreachable
     
-    # Ensure the map has a valid path from P to E
+    # Place enemies (V characters)
+    enemy_count = max(1, (width * height) // 25)  # Scale with map size
+    placed_enemies = 0
+    while placed_enemies < enemy_count:
+        vx, vy = random.randint(1, width - 2), random.randint(1, height - 2)
+        if map_grid[vy][vx] == '0':
+            # Temporarily place enemy
+            map_grid[vy][vx] = 'V'
+            # Check if the exit is still reachable after placing the enemy
+            if is_valid_path(map_grid, px, py, ex, ey):
+                placed_enemies += 1
+            else:
+                # Enemy blocks the path, remove it
+                map_grid[vy][vx] = '0'
+    
+    # Ensure all collectibles are reachable
+    for y in range(height):
+        for x in range(width):
+            if map_grid[y][x] == 'C' and not is_valid_path(map_grid, px, py, x, y):
+                # If collectible is not reachable, convert it to free space
+                map_grid[y][x] = '0'
+    
+    # Final check to ensure the map has a valid path from P to E
     if not is_valid_path(map_grid, px, py, ex, ey):
         return generate_map(width, height)  # Regenerate if no valid path
     
     return '\n'.join(''.join(row) for row in map_grid)
 
 def is_valid_path(map_grid, px, py, ex, ey):
+    """
+    Check if there's a valid path from (px, py) to (ex, ey).
+    Valid path can only go through free spaces ('0'), collectibles ('C'), and exit ('E').
+    Cannot go through enemies ('V') or obstacles ('1').
+    """
     height, width = len(map_grid), len(map_grid[0])
     visited = set()
     queue = deque([(px, py)])
+    visited.add((px, py))
     
     while queue:
         x, y = queue.popleft()
@@ -57,7 +86,7 @@ def is_valid_path(map_grid, px, py, ex, ey):
         
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             nx, ny = x + dx, y + dy
-            if (1 <= nx < width - 1 and 1 <= ny < height - 1 and 
+            if (0 <= nx < width and 0 <= ny < height and 
                 (nx, ny) not in visited and map_grid[ny][nx] in {'0', 'E', 'C'}):
                 visited.add((nx, ny))
                 queue.append((nx, ny))
@@ -69,7 +98,35 @@ def save_map_to_file(map_data, filename="map.ber"):
         f.write(map_data + "\n")
     print(f"Map saved to {filename}")
 
-# Generate and save map
-width, height = random.randint(5, 42), random.randint(5, 23)  # Random dimensions within max
-map_data = generate_map(width, height)
-save_map_to_file(map_data)
+def main():
+    # Default random size
+    width, height = random.randint(5, 42), random.randint(5, 23)
+    filename = "map.ber"
+    
+    # Check if custom size is provided as command line arguments
+    if len(sys.argv) >= 3:
+        try:
+            width = int(sys.argv[1])
+            height = int(sys.argv[2])
+            
+            # Validate dimensions
+            if width < 5 or height < 5:
+                print("Warning: Map dimensions must be at least 5x5. Using minimum values.")
+                width = max(5, width)
+                height = max(5, height)
+            
+            # Check for custom filename
+            if len(sys.argv) >= 4:
+                filename = sys.argv[3]
+                if not filename.endswith('.ber'):
+                    filename += '.ber'
+                    
+        except ValueError:
+            print("Error: Width and height must be integers. Using random values.")
+    
+    print(f"Generating map with dimensions {width}x{height}")
+    map_data = generate_map(width, height)
+    save_map_to_file(map_data, filename)
+
+if __name__ == "__main__":
+    main()

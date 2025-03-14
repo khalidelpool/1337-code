@@ -138,3 +138,12 @@ int main(void)
     // mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
     mlx_loop(mlx);
 }
+
+    // for (int y = 0; var->map[y]; y++)
+    // {
+    //     for(int x = 0; var->map[y][x]; x++)
+    //     {
+    //         printf("%c", var->map[y][x]);
+    //     }
+    //     printf("\n");
+    // }

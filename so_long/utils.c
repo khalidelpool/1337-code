@@ -8,6 +8,7 @@
 #define XK_Up		0xff52  /* Move up, up arrow */
 #define XK_Right	0xff53  /* Move right, right arrow */
 #define XK_Down		0xff54  /* Move down, down arrow */
+#define ESC			65307
 
 typedef struct s_queue
 {
@@ -28,21 +29,22 @@ typedef struct	s_img {
 typedef struct	s_vars {
     void	*mlx;
     void	*win;
-    t_img   bkgr;
-    t_img   rock;
-    t_img   plyr;
-    t_img   food;
-    t_img   exit;
-	t_img	vill;
+	t_img	anex;
 	t_img	anim;
-	t_img	fram;
-    char    *map[33];
+	t_img   bkgr;
+	t_img   exit;
+	t_img   food;
+    t_img   plyr;
+    t_img   rock;
+	t_img	vill;
+    char    *map[25];
     int     wdt;
     int     hgt;
 	int		bksz;
     int     count;
 	int		pos[2];
 	int		random;
+	int		last_move;
 	int		curr_frame;
 	t_queue *queue;
     t_queue *visited;
@@ -88,6 +90,28 @@ char	*ft_strdup(const char *s)
 		return ((0));
 	ft_memcpy(dup, s, size);
 	return ((dup));
+}
+
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return ((1));
+	return ((0));
+}
+
+
+int	ft_isalpha(int c)
+{
+	if ((c > 64 && c < 91) || (c > 96 && c < 123))
+		return (((1)));
+	return (((0)));
+}
+
+int	ft_isalnum(int c)
+{
+	if (ft_isalpha(c) || ft_isdigit(c))
+		return (((1)));
+	return (((0)));
 }
 
 int	in_set(char c, char const *set)
@@ -203,6 +227,28 @@ void str_replace(char *str, char c, char n)
             str[i] = n;
         i++;
     }
+}
+
+int ocurrence(t_vars *var, char c)
+{
+	int y;
+	int x;
+	int result;
+
+	y = 0;
+	result = 0;
+	while (var->map[y])
+	{
+		x = 0;
+		while (var->map[y][x])
+		{
+			if (var->map[y][x] == c)
+				result++;
+			x++;
+		}
+		y++;
+	}
+	return (result);
 }
 
 int	*find_c(t_vars *var, char c, int *pos)
