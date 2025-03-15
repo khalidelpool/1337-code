@@ -35,7 +35,7 @@ void	check_path(t_vars *var)
 		}
 	}
 	if (!ate_all(var))
-		(write(1, WRG_PTH, ft_strlen(WRG_PTH)), quit(var), exit(0));
+		(display_err(WRG_PTH), quit(var), exit(0));
 	(q_clear(&var->queue), q_clear(&var->visited));
 }
 
@@ -64,7 +64,7 @@ void	init_textures(t_vars *var)
 	var->plex.img = load(var->mlx, PLEX, &var->bksz, &var->bksz);
 	if (!(var->bkgr.img && var->food.img && var->rock.img
 			&& var->exit.img && var->plyr.img && var->plex.img))
-		(write(1, IMG_ERR, ft_strlen(IMG_ERR)), quit(var), exit(0));
+		(display_err(IMG_ERR), quit(var), exit(0));
 }
 
 void	parse(t_vars *var, char *path)
@@ -74,7 +74,7 @@ void	parse(t_vars *var, char *path)
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-		(write(1, OPN_ERR, ft_strlen(OPN_ERR)), perror(""), quit(var), exit(0));
+		(display_err(OPN_ERR), perror(""), quit(var), exit(0));
 	var->map[var->wdt] = get_next_line(fd);
 	while (var->map[var->wdt] != NULL)
 	{
@@ -96,7 +96,7 @@ int	main(int ac, char **av)
 	t_vars	var;
 
 	if (ac != 2 || !check_file_name(av[1]))
-		(write(1, PRM_ERR, ft_strlen(PRM_ERR)), exit(0));
+		(display_err(PRM_ERR), exit(0));
 	ft_bzero(&var, sizeof(t_vars));
 	parse(&var, av[1]);
 	check_path(&var);

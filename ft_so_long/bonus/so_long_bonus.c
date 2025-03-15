@@ -93,7 +93,7 @@ int main(int ac, char **av)
     t_vars var;
 
 	if (ac != 2 || !check_file_name(av[1]))
-        (display_err(PRM_ERR), exit(0)); // should update all error prints to write to std_err
+        (display_err(PRM_ERR), exit(0));
     ft_bzero(&var, sizeof(t_vars));
     parse(&var, av[1]);
     check_path(&var);

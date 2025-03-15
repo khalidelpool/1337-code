@@ -84,7 +84,7 @@ void	update_map(t_vars *var, int y, int x)
 		if (var->map[var->pos[1] + y][var->pos[0] + x] == 'E')
 		{
 			if (!find_c(var, 'C', NULL))
-				(display_err("You Won!\n"), quit(var), exit(0));
+				(write(1, "You Won!\n", 9), quit(var), exit(0));
 			var->last_move = 'E' - '0';
 			switch_images(var);
 		}
@@ -92,7 +92,7 @@ void	update_map(t_vars *var, int y, int x)
 		var->pos[0] += x;
 		var->pos[1] += y;
 		if (var->count == 2147483647)
-			(display_err("Too much moves\n"), quit(var), exit(0));
+			(write(1, "You Lost!\n", 10), quit(var), exit(0));
 		var->count++;
 		draw_map(var);
 		print_moves(var);
