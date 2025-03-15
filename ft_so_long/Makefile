@@ -1,27 +1,36 @@
-NAME_1 = so_long
-NAME_2 = so_long_bonus
-
-source = so_long.c
-object = $(source:.c=.o)
-
-bonus_source = so_long_bonus.c
-bonus_object = $(bonus_source:.c=.o)
+CC := cc
+FLAGS := -Wall -Wextra -Werror
 
 MLX_FLAGS = -I./minilibx-linux -L./minilibx-linux -lmlx -lXext -lX11
 
-FLAGS = -Wall -Wextra -Werror
+NAME_1 = so_long
+NAME_2 = so_long_bonus
 
-.PHONY: all clean fclean re
+PROJE_DIR = projects/
+MANDA_DIR = mandatory/
+BONUS_DIR = bonus/
+
+PROJE_FILES = get_next_line.c get_next_line_utils.c libft_first.c libft_second.c
+MANDA_FILES = so_long.c so_long_utils_primary.c so_long_utils_secondary.c so_long_utils_tertiary.c\
+				so_long_utils_quaternary.c
+BONUS_FILES = so_long_bonus.c  so_long_utils_primary_bonus.c  so_long_utils_quaternary_bonus.c\
+				so_long_utils_secondary_bonus.c  so_long_utils_tertiary_bonus.c
+
+source = $(addprefix $(MANDA_DIR), $(MANDA_FILES)) $(addprefix $(PROJE_DIR), $(PROJE_FILES))
+object = $(source:.c=.o)
+
+bonus_source = $(addprefix $(BONUS_DIR), $(BONUS_FILES)) $(addprefix $(PROJE_DIR), $(PROJE_FILES))
+bonus_object = $(bonus_source:.c=.o)
 
 all: $(NAME_1)
 
 $(NAME_1): $(object)
-	cc $(object) $(MLX_FLAGS) -o $(NAME_1)
+	$(CC) $(object) $(MLX_FLAGS) -o $(NAME_1)
 
 bonus: $(NAME_2)
 
 $(NAME_2): $(bonus_object)
-	cc $(bonus_object) $(MLX_FLAGS) -o $(NAME_2)
+	$(CC) $(bonus_object) $(MLX_FLAGS) -o $(NAME_2)
 
 clean: 
 	rm -f $(object) $(bonus_object)
@@ -32,4 +41,6 @@ fclean: clean
 re: fclean all
 
 %.o:%.c
-	cc $(FLAGS) -c $< -o $@ 
+	$(CC) $(FLAGS) -c $< -o $@ 
+
+.PHONY: all clean fclean re
