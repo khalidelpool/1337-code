@@ -1,34 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/15 18:04:10 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/03/15 18:04:26 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "so_long.h"
 
-void check_path(t_vars *var)
+void	check_path(t_vars *var)
 {
-    t_queue *node;
-    int     bros[5][2];
-    int     i;
+	t_queue		*node;
+	int			bros[5][2];
+	int			i;
 
-    if (put(&var->queue, var->pos[0], var->pos[1])
-        || put(&var->visited, var->pos[0], var->pos[1]))
-        (printf(PTH_ERR), quit(var), exit(0));
-    while(var->queue != NULL)
-    {
-        i = 0;
-        node = pop(&var->queue);
-        next_to(var, node, bros);
-        while (bros[i][0] != -1)
-        {
-            if (!in_list(var->visited, bros[i]))
-                if (put(&var->queue, bros[i][0], bros[i][1])
-                    || put(&var->visited, bros[i][0], bros[i][1]))
-                        (printf(PTH_ERR), quit(var), exit(0));
-            i++;
-        }
-    }
-    if (!ate_all(var))
-        (printf(WRG_PTH), quit(var), exit(0));
-    (q_clear(&var->queue), q_clear(&var->visited));
+	if (put(&var->queue, var->pos[0], var->pos[1])
+		|| put(&var->visited, var->pos[0], var->pos[1]))
+		(quit(var), exit(0));
+	while (var->queue != NULL)
+	{
+		i = 0;
+		node = pop(&var->queue);
+		next_to(var, node, bros);
+		while (bros[i][0] != -1)
+		{
+			if (!in_list(var->visited, bros[i]))
+				if (put(&var->queue, bros[i][0], bros[i][1])
+					|| put(&var->visited, bros[i][0], bros[i][1]))
+					(quit(var), exit(0));
+			i++;
+		}
+	}
+	if (!ate_all(var))
+		(write(1, WRG_PTH, ft_strlen(WRG_PTH)), quit(var), exit(0));
+	(q_clear(&var->queue), q_clear(&var->visited));
 }
 
-int key_hook(int keysym, t_vars *var)
+int	key_hook(int keysym, t_vars *var)
 {
 	if (keysym == 'w' || keysym == XK_Up)
 		update_map(var, -1, 0);
@@ -43,27 +54,27 @@ int key_hook(int keysym, t_vars *var)
 	return (0);
 }
 
-void init_textures(t_vars *var)
+void	init_textures(t_vars *var)
 {
-    var->bkgr.img = load(var->mlx, BKGR, &var->bksz, &var->bksz);
-    var->food.img = load(var->mlx, FOOD, &var->bksz, &var->bksz);
-    var->rock.img = load(var->mlx, ROCK, &var->bksz, &var->bksz);
-    var->exit.img = load(var->mlx, EXIT, &var->bksz, &var->bksz);
-    var->plyr.img = load(var->mlx, PLYR, &var->bksz, &var->bksz);
-    var->plex.img = load(var->mlx, PLEX, &var->bksz, &var->bksz);
-    if (!(var->bkgr.img && var->food.img && var->rock.img
-        && var->exit.img && var->plyr.img && var->plex.img))
-        (printf(IMG_ERR), quit(var), exit(0));
+	var->bkgr.img = load(var->mlx, BKGR, &var->bksz, &var->bksz);
+	var->food.img = load(var->mlx, FOOD, &var->bksz, &var->bksz);
+	var->rock.img = load(var->mlx, ROCK, &var->bksz, &var->bksz);
+	var->exit.img = load(var->mlx, EXIT, &var->bksz, &var->bksz);
+	var->plyr.img = load(var->mlx, PLYR, &var->bksz, &var->bksz);
+	var->plex.img = load(var->mlx, PLEX, &var->bksz, &var->bksz);
+	if (!(var->bkgr.img && var->food.img && var->rock.img
+			&& var->exit.img && var->plyr.img && var->plex.img))
+		(write(1, IMG_ERR, ft_strlen(IMG_ERR)), quit(var), exit(0));
 }
 
-void parse(t_vars *var, char *path)
+void	parse(t_vars *var, char *path)
 {
-	int fd;
-	int len;
+	int		fd;
+	int		len;
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-        (perror("Error\nopen"), quit(var), exit(0));
+		(write(1, OPN_ERR, ft_strlen(OPN_ERR)), perror(""), quit(var), exit(0));
 	var->map[var->wdt] = get_next_line(fd);
 	while (var->map[var->wdt] != NULL)
 	{
@@ -72,32 +83,32 @@ void parse(t_vars *var, char *path)
 		if ((var->hgt == 0 || len == var->hgt) && len < 44 && var->wdt < 23)
 			var->hgt = len;
 		else
-			(printf(MAP_ERR), close(fd), quit(var), exit(0));
-        var->wdt++;
+			(display_err(MAP_ERR), close(fd), quit(var), exit(0));
+		var->wdt++;
 		var->map[var->wdt] = get_next_line(fd);
 	}
-    close(fd);
+	close(fd);
 	check_map(var);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-    t_vars var;
+	t_vars	var;
 
 	if (ac != 2 || !check_file_name(av[1]))
-        (printf("Error\nusage: program *.ber\n"), exit(0)); // should update all error prints to write to std_err
-    ft_bzero(&var, sizeof(t_vars));
-    parse(&var, av[1]);
-    check_path(&var);
-    var.mlx = mlx_init();
-    if (var.mlx == NULL)
-        return (quit(&var), 0);
-    init_textures(&var);
-    var.win = new_win(var.mlx, var.hgt * var.bksz, var.wdt * var.bksz, "Main");
-    if (var.win == NULL)
-        return (quit(&var), 0);
-    draw_map(&var);
-    mlx_hook(var.win, 2, 1L<<0, key_hook, &var);
-    mlx_hook(var.win, 17, 1L<<17, destroy, &var);
-    mlx_loop(var.mlx);
+		(write(1, PRM_ERR, ft_strlen(PRM_ERR)), exit(0));
+	ft_bzero(&var, sizeof(t_vars));
+	parse(&var, av[1]);
+	check_path(&var);
+	var.mlx = mlx_init();
+	if (var.mlx == NULL)
+		return (quit(&var), 0);
+	init_textures(&var);
+	var.win = new_win(var.mlx, var.hgt * var.bksz, var.wdt * var.bksz, "Main");
+	if (var.win == NULL)
+		return (quit(&var), 0);
+	draw_map(&var);
+	mlx_hook(var.win, 2, 1L << 0, key_hook, &var);
+	mlx_hook(var.win, 17, 1L << 17, destroy, &var);
+	mlx_loop(var.mlx);
 }

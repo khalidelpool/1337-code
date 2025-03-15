@@ -8,7 +8,7 @@ void check_path(t_vars *var)
 
     if (put(&var->queue, var->pos[0], var->pos[1])
         || put(&var->visited, var->pos[0], var->pos[1]))
-        (printf(PTH_ERR), quit(var), exit(0));
+        (display_err(PTH_ERR), quit(var), exit(0));
     while(var->queue != NULL)
     {
         i = 0;
@@ -19,12 +19,12 @@ void check_path(t_vars *var)
             if (!in_list(var->visited, bros[i]))
                 if (put(&var->queue, bros[i][0], bros[i][1])
                     || put(&var->visited, bros[i][0], bros[i][1]))
-                        (printf(PTH_ERR), quit(var), exit(0));
+                        (display_err(PTH_ERR), quit(var), exit(0));
             i++;
         }
     }
     if (!ate_all(var))
-        (printf(WRG_PTH), quit(var), exit(0));
+        (display_err(WRG_PTH), quit(var), exit(0));
     (q_clear(&var->queue), q_clear(&var->visited));
 }
 
@@ -60,7 +60,7 @@ void init_textures(t_vars *var)
         && var->exit.img && var->vill.img && var->plyr.img
         && var->plyr.addr && var->anim.img && var->anim.addr
         && var->anex.img && var->anex.addr))
-        (printf(IMG_ERR), quit(var), exit(0));
+        (display_err(IMG_ERR), quit(var), exit(0));
     change_frame(var);
 }
 
@@ -71,7 +71,7 @@ void parse(t_vars *var, char *path)
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-        (perror("Error\nopen"), quit(var), exit(0));
+        (display_err(OPN_ERR), perror(""), quit(var), exit(0));
 	var->map[var->wdt] = get_next_line(fd);
 	while (var->map[var->wdt] != NULL)
 	{
@@ -80,7 +80,7 @@ void parse(t_vars *var, char *path)
 		if ((var->hgt == 0 || len == var->hgt) && len < 44 && var->wdt < 23)
 			var->hgt = len;
 		else
-			(printf(MAP_ERR), close(fd), quit(var), exit(0));
+			(display_err(MAP_ERR), close(fd), quit(var), exit(0));
         var->wdt++;
 		var->map[var->wdt] = get_next_line(fd);
 	}
@@ -93,7 +93,7 @@ int main(int ac, char **av)
     t_vars var;
 
 	if (ac != 2 || !check_file_name(av[1]))
-        (printf("Error\nusage: program *.ber\n"), exit(0)); // should update all error prints to write to std_err
+        (display_err(PRM_ERR), exit(0)); // should update all error prints to write to std_err
     ft_bzero(&var, sizeof(t_vars));
     parse(&var, av[1]);
     check_path(&var);

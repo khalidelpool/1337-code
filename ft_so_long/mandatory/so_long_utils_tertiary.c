@@ -45,8 +45,13 @@ void print_moves(t_vars *var)
 
     str_move_count = ft_strjoin_px("moves: ", ft_itoa(var->count), 2);
     if (str_move_count == NULL)
-        (printf(MLC_ERR), quit(var), exit(0));
+        (display_err(MLC_ERR), quit(var), exit(0));
     write(1, str_move_count, ft_strlen(str_move_count));
 	write(1, "\n", 1);
     free(str_move_count);
+}
+
+void display_err(char *str)
+{
+    write(1, str, ft_strlen(str));
 }

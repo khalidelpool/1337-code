@@ -19,11 +19,13 @@
 #define VILL 		"./textures/vill.xpm"
 #define ANEX 		"./textures/anex.xpm"
 #define ANIM 		"./textures/anim.xpm"
-#define MAP_ERR		"Error\ninvalide map file\n"
-#define PTH_ERR		"Error\nfailed while checking path\n"
-#define WRG_PTH		"Error\nNo valid path!\n"
-#define IMG_ERR		"Failed to load textures!\n"
 #define MLC_ERR		"Error\nMalloc failed\n"
+#define WRG_PTH		"Error\nNo valid path!\n"
+#define MAP_ERR		"Error\ninvalide map file\n"
+#define OPN_ERR		"Error\nCouldn't open file\n"
+#define PRM_ERR		"Error\nusage: program *.ber\n"
+#define IMG_ERR		"Error\nFailed to load textures!\n"
+#define PTH_ERR		"Error\nfailed while checking path\n"
 
 typedef struct s_queue
 {
@@ -99,5 +101,6 @@ void	change_frame(t_vars *var);
 char	*ft_strjoin_px(char *str, char *buff, int choice);
 char	*ft_itoa(int n);
 int		ft_isalnum(int c);
+void	display_err(char *str);
 
 #endif

@@ -13,7 +13,7 @@ void check_map(t_vars *var)
 		{
 			if (((y == 0 || x == 0 || y == var->wdt - 1 || x == var->hgt - 1)
 				&& var->map[y][x] != '1') || !in_set(var->map[y][x], "01CPVE"))
-				(printf(MAP_ERR), quit(var), exit(0));
+				(write(1, MAP_ERR, ft_strlen(MAP_ERR)), quit(var), exit(0));
 			x++;
 		}
 		y++;
@@ -21,7 +21,7 @@ void check_map(t_vars *var)
 	if (ocurrence(var, 'P') > 1 || ocurrence(var, 'E') > 1
 		|| !find_c(var, 'C', NULL) || !find_c(var, 'E', NULL)
 		|| !find_c(var, 'P', var->pos))
-		(printf(MAP_ERR), quit(var), exit(0));
+		(write(1, MAP_ERR, ft_strlen(MAP_ERR)), quit(var), exit(0));
 }
 
 int	render_next_frame(t_vars *var)
@@ -35,7 +35,7 @@ int	render_next_frame(t_vars *var)
         change_frame(var);
     }
     var->random++;
-    if (var->random > 3500)
+    if (var->random > 9000)
         var->random = 0;
     mlx_put_image_to_window(var->mlx, var->win, var->plyr.img, var->pos[0] * var->bksz, var->pos[1] * var->bksz);
 	return (0);
@@ -90,18 +90,18 @@ void update_map(t_vars *var, int y, int x)
         if(var->map[var->pos[1] + y][var->pos[0] + x] == 'E')
         {
             if (!find_c(var, 'C', NULL))
-			    (printf("You Won!\n"), quit(var), exit(0));
+			    (write(1, "You Won!\n", 9), quit(var), exit(0));
             var->last_move = 'E' - '0';
         }
         var->map[var->pos[1] + y][var->pos[0] + x] = 'P';
         var->pos[0] += x;
         var->pos[1] += y;
         if (var->count == 2147483647)
-            (printf("Too much moves\n"), quit(var), exit(0));
+            (write(1, "Too much moves\n", 15), quit(var), exit(0));
         var->count++;
         change_frame(var);
         draw_map(var);
     }
     else if(var->map[var->pos[1] + y][var->pos[0] + x] == 'V')
-			(printf("You Lost!\n"), quit(var), exit(0));
+			(write(1, "You Lost!\n", 10), quit(var), exit(0));
 }

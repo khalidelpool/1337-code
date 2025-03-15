@@ -12,6 +12,8 @@
 #define XK_Down		65364
 #define new_win		mlx_new_window
 #define load		mlx_xpm_file_to_image
+#define draw		mlx_put_image_to_window
+#define mlxNwin		var->mlx, var->win
 #define BKGR		"./textures/bkgr.xpm"
 #define FOOD		"./textures/food.xpm"
 #define ROCK 		"./textures/rock.xpm"
@@ -21,6 +23,8 @@
 #define MLC_ERR		"Error\nMalloc failed\n"
 #define WRG_PTH		"Error\nNo valid path!\n"
 #define MAP_ERR		"Error\ninvalide map file\n"
+#define OPN_ERR		"Error\nCouldn't open file\n"
+#define PRM_ERR		"Error\nusage: program *.ber\n"
 #define IMG_ERR		"Error\nFailed to load textures!\n"
 #define PTH_ERR		"Error\nfailed while checking path\n"
 
@@ -96,5 +100,6 @@ void	change_frame(t_vars *var);
 char	*ft_strjoin_px(char *str, char *buff, int choice);
 char	*ft_itoa(int n);
 int		ft_isalnum(int c);
+void	display_err(char *str);
 
 #endif

@@ -62,3 +62,8 @@ void quit(t_vars *var)
         free(var->mlx);
     }
 }
+
+void display_err(char *str)
+{
+    write(1, str, ft_strlen(str));
+}

@@ -61,7 +61,7 @@ void print_moves(t_vars *var)
 
     str_move_count = ft_strjoin_px("moves: ", ft_itoa(var->count), 2);
     if (str_move_count == NULL)
-        (printf(MLC_ERR), quit(var), exit(0));
+        (display_err(MLC_ERR), quit(var), exit(0));
     mlx_string_put(var->mlx, var->win, 22, 26, 0xffffffff, str_move_count);
     free(str_move_count);
 }

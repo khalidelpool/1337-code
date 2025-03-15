@@ -49,6 +49,7 @@ void quit(t_vars *var)
         mlx_destroy_image(var->mlx, var->exit.img);
         mlx_destroy_image(var->mlx, var->food.img);
         mlx_destroy_image(var->mlx, var->plyr.img);
+        mlx_destroy_image(var->mlx, var->plex.img);
         mlx_destroy_image(var->mlx, var->rock.img);
     }
     if (var->win)
