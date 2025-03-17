@@ -47,7 +47,7 @@ void	execute(char *cmd, char **envp, int *pipe_fd)
 	path = NULL;
 	array = get_array(cmd);
 	if (array == NULL)
-		(close_fds(pipe_fd), exit(0));
+		(close_fds(pipe_fd), exit(EXIT_FAILURE));
 	if (!ft_strchr(array[0], '/'))
 		path = get_binary(array[0], envp);
 	if (path == NULL)
@@ -60,7 +60,7 @@ void	execute(char *cmd, char **envp, int *pipe_fd)
 		free(path);
 		free_arr(&array);
 		close_fds(pipe_fd);
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -89,7 +89,7 @@ void	piper(int *pip, int wr_flags, char **av, char **envp)
 			(dup2(pip[at(i, CURR, WRITE)], 1), close(pip[at(i, CURR, WRITE)]));
 			execute(av[i], envp, pip);
 		}
-		(cleanup(i, pip, av[i + 2]), i++);
+		(cleanup(i, pip, av[i + 2], id), i++);
 	}
 }
 
@@ -98,14 +98,19 @@ int	main(int ac, char **av, char **envp)
 	int	pipe_fd[4];
 
 	if (ac != 5)
-		return (0);
+		return (EXIT_FAILURE);
 	pipe_fd[0] = -1;
 	pipe_fd[1] = -1;
 	pipe_fd[2] = -1;
 	pipe_fd[3] = -1;
 	pipe_fd[at(0, PREV, READ)] = open(av[1], O_RDONLY);
 	if (pipe_fd[at(0, PREV, READ)] == -1)
-		(perror("open"), exit(0));
+	{
+		perror("open");
+		if (pipe(&pipe_fd[at(0, PREV, READ)]))
+			return (EXIT_FAILURE);
+		close(pipe_fd[at(0, PREV, WRITE)]);
+	}
 	av = &av[2];
 	piper(pipe_fd, O_WRONLY | O_CREAT | O_TRUNC, av, envp);
 }

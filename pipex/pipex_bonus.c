@@ -86,7 +86,7 @@ void	execute(char *cmd, char **envp, int *pipe_fd)
 		free(path);
 		free_arr(&array);
 		close_fds(pipe_fd);
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -115,7 +115,7 @@ void	piper(int *pip, int wr_flags, char **av, char **envp)
 			(dup2(pip[at(i, CURR, WRITE)], 1), close(pip[at(i, CURR, WRITE)]));
 			execute(av[i], envp, pip);
 		}
-		(cleanup(i, pip, av[i + 2]), i++);
+		(cleanup(i, pip, av[i + 2], id), i++);
 	}
 }
 
@@ -133,7 +133,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		pipe_fd[at(0, PREV, READ)] = open(av[1], O_RDONLY);
 		if (pipe_fd[at(0, PREV, READ)] == -1)
-			(perror("open"), exit(0));
+			own_file(pipe_fd);
 		av = &av[2];
 		piper(pipe_fd, O_WRONLY | O_CREAT | O_TRUNC, av, envp);
 	}

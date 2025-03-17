@@ -58,6 +58,7 @@ void	free_arr(char ***ptr);
 void	close_fds(int *pipe_fd);
 int		at(int i, int state, int wr);
 void	free_size(char ***ptr, int size);
-void	cleanup(int i, int *pip, char *av);
+void	cleanup(int i, int *pip, char *av, pid_t id);
+void	own_file(int *pipe_fd);
 
 #endif

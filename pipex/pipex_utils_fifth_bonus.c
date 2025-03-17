@@ -61,3 +61,11 @@ int	arr_size(char **ptr)
 		size++;
 	return (size);
 }
+
+void	own_file(int *pipe_fd)
+{
+	perror("open");
+	if (pipe(&pipe_fd[at(0, PREV, READ)]))
+		exit(EXIT_FAILURE);
+	close(pipe_fd[at(0, PREV, WRITE)]);
+}

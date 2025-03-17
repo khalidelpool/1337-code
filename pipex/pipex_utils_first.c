@@ -23,14 +23,14 @@ void	close_fds(int *pipe_fd)
 	}
 }
 
-void	cleanup(int i, int *pip, char *av)
+void	cleanup(int i, int *pip, char *av, pid_t id)
 {
 	int	status;
 
 	(close(pip[at(i, PREV, READ)]), close(pip[at(i, CURR, WRITE)]));
 	if (av == NULL)
 	{
-		wait(&status);
+		waitpid(id, &status, 0);
 		if (WIFEXITED(status) && WEXITSTATUS(status))
 			exit(WEXITSTATUS(status));
 		else if (WIFSIGNALED(status))
