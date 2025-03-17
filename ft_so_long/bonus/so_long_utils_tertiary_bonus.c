@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long_utils_tertiary_bonus.c                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/17 21:07:37 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/03/17 21:07:40 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "so_long_bonus.h"
 
 t_queue	*pop(t_queue **queue)
 {
-	t_queue *node;
+	t_queue	*node;
 
 	if (queue == NULL || (*queue) == NULL)
 		return (NULL);
@@ -39,29 +50,29 @@ int	put(t_queue **queue, int x, int y)
 	return (0);
 }
 
+void	print_moves(t_vars *var)
+{
+	char	*str_move_count;
+
+	str_move_count = ft_strjoin_px("moves: ", ft_itoa(var->count), 2);
+	if (str_move_count == NULL)
+		(ft_putstr(MLC_ERR), quit(var), exit(0));
+	mlx_string_put(var->mlx, var->win, 22, 26, 0xffffffff, str_move_count);
+	free(str_move_count);
+}
+
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	*(unsigned int *) dst = color;
 }
 
-int     my_mlx_pixel_get(t_img *img, int x, int y)
+int	my_mlx_pixel_get(t_img *img, int x, int y)
 {
 	char	*dst;
-    
+
 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	return (*(unsigned int*)dst);
-}
-
-void print_moves(t_vars *var)
-{
-    char *str_move_count;
-
-    str_move_count = ft_strjoin_px("moves: ", ft_itoa(var->count), 2);
-    if (str_move_count == NULL)
-        (display_err(MLC_ERR), quit(var), exit(0));
-    mlx_string_put(var->mlx, var->win, 22, 26, 0xffffffff, str_move_count);
-    free(str_move_count);
+	return (*(unsigned int *) dst);
 }

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft_first.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/17 21:36:05 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/03/17 21:36:09 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../mandatory/so_long.h"
 
 int	ft_isalnum(int c)
@@ -31,16 +42,17 @@ size_t	ft_strlen(const char *s)
 	return ((i));
 }
 
-void str_replace(char *str, char c, char n)
+void	str_replace(char *str, char c, char n)
 {
-    int i = 0;
+	int	i;
 
-    while (str[i])
-    {
-        if (str[i] == c)
-            str[i] = n;
-        i++;
-    }
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			str[i] = n;
+		i++;
+	}
 }
 
 void	ft_bzero(void *s, size_t n)

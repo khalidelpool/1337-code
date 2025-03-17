@@ -25,7 +25,7 @@ void	check_map(t_vars *var)
 			if (((y == 0 || x == 0 || y == var->wdt - 1 || x == var->hgt - 1)
 					&& var->map[y][x] != '1')
 					|| !in_set(var->map[y][x], "01CPE"))
-				(display_err(MAP_ERR), quit(var), exit(0));
+				(ft_putstr(MAP_ERR), quit(var), exit(0));
 			x++;
 		}
 		y++;
@@ -33,7 +33,7 @@ void	check_map(t_vars *var)
 	if (ocurrence(var, 'P') > 1 || ocurrence(var, 'E') > 1
 		|| !find_c(var, 'C', NULL) || !find_c(var, 'E', NULL)
 		|| !find_c(var, 'P', var->pos))
-		(display_err(MAP_ERR), quit(var), exit(0));
+		(ft_putstr(MAP_ERR), quit(var), exit(0));
 }
 
 void	draw_map(t_vars *var)
@@ -49,13 +49,13 @@ void	draw_map(t_vars *var)
 		while (x < var->hgt)
 		{
 			if (var->map[y][x] == '1')
-				draw(mlxNwin, var->rock.img, x * var->bksz, y * var->bksz);
+				drawer(var, var->rock.img, x, y);
 			else if (var->map[y][x] == 'C')
-				draw(mlxNwin, var->food.img, x * var->bksz, y * var->bksz);
+				drawer(var, var->food.img, x, y);
 			else if (var->map[y][x] == 'E')
-				draw(mlxNwin, var->exit.img, x * var->bksz, y * var->bksz);
+				drawer(var, var->exit.img, x, y);
 			else if (var->map[y][x] == 'P')
-				draw(mlxNwin, var->plyr.img, x * var->bksz, y * var->bksz);
+				drawer(var, var->plyr.img, x, y);
 			x++;
 		}
 		y++;
@@ -84,7 +84,7 @@ void	update_map(t_vars *var, int y, int x)
 		if (var->map[var->pos[1] + y][var->pos[0] + x] == 'E')
 		{
 			if (!find_c(var, 'C', NULL))
-				(write(1, "You Won!\n", 9), quit(var), exit(0));
+				(ft_putstr("You Won!\n"), quit(var), exit(0));
 			var->last_move = 'E' - '0';
 			switch_images(var);
 		}
@@ -92,7 +92,7 @@ void	update_map(t_vars *var, int y, int x)
 		var->pos[0] += x;
 		var->pos[1] += y;
 		if (var->count == 2147483647)
-			(write(1, "You Lost!\n", 10), quit(var), exit(0));
+			(ft_putstr("Too much moves\n"), quit(var), exit(0));
 		var->count++;
 		draw_map(var);
 		print_moves(var);

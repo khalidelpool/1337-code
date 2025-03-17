@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long_utils_tertiary.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mous <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/17 10:50:18 by kel-mous          #+#    #+#             */
+/*   Updated: 2025/03/17 10:50:20 by kel-mous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "so_long.h"
 
 t_queue	*pop(t_queue **queue)
 {
-	t_queue *node;
+	t_queue	*node;
 
 	if (queue == NULL || (*queue) == NULL)
 		return (NULL);
@@ -39,19 +50,19 @@ int	put(t_queue **queue, int x, int y)
 	return (0);
 }
 
-void print_moves(t_vars *var)
+void	print_moves(t_vars *var)
 {
-    char *str_move_count;
+	char	*str_move_count;
 
-    str_move_count = ft_strjoin_px("moves: ", ft_itoa(var->count), 2);
-    if (str_move_count == NULL)
-        (display_err(MLC_ERR), quit(var), exit(0));
-    write(1, str_move_count, ft_strlen(str_move_count));
-	write(1, "\n", 1);
-    free(str_move_count);
+	str_move_count = ft_strjoin_px("moves: ", ft_itoa(var->count), 2);
+	if (str_move_count == NULL)
+		(ft_putstr(MLC_ERR), quit(var), exit(0));
+	ft_putstr(str_move_count);
+	ft_putstr("\n");
+	free(str_move_count);
 }
 
-void display_err(char *str)
+void	ft_putstr(char *str)
 {
-    write(1, str, ft_strlen(str));
+	write(1, str, ft_strlen(str));
 }
