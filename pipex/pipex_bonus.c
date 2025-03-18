@@ -124,7 +124,7 @@ int	main(int ac, char **av, char **envp)
 	int	pipe_fd[4];
 
 	if (ac < 5)
-		return (0);
+		return (EXIT_FAILURE);
 	pipe_fd[0] = -1;
 	pipe_fd[1] = -1;
 	pipe_fd[2] = -1;
