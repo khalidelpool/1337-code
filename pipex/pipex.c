@@ -54,13 +54,22 @@ void	execute(char *cmd, char **envp, int *pipe_fd)
 		path = ft_strdup(array[0]);
 	if (path == NULL)
 		(free_arr(&array), close_fds(pipe_fd), exit(EXIT_FAILURE));
+	if (!ft_strchr(path, '/'))
+	{
+		ft_putstr("command not found: ", 2);
+		ft_putstr(path, 2);
+		ft_putstr("\n", 2);
+		exit(127);
+	}
+	errno = ENOENT;
+	
 	if (execve(path, array, envp) == -1)
 	{
 		perror(array[0]);
 		free(path);
 		free_arr(&array);
 		close_fds(pipe_fd);
-		exit(EXIT_FAILURE);
+		exit(errno);
 	}
 }
 
