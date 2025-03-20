@@ -80,14 +80,17 @@ void	execute(char *cmd, char **envp, int *pipe_fd)
 		path = ft_strdup(array[0]);
 	if (path == NULL)
 		(free_arr(&array), close_fds(pipe_fd), exit(EXIT_FAILURE));
+	if (!ft_strchr(path, '/') || access(path, F_OK) == -1)
+		(free_arr(&array), close_fds(pipe_fd),
+			ft_putstr("command not found: ", 2), ft_putstr(path, 2),
+			ft_putstr("\n", 2), free(path), exit(127));
+	else if (access(path, X_OK) == -1)
+		(free_arr(&array), close_fds(pipe_fd),
+			ft_putstr("permission denied: ", 2), ft_putstr(path, 2),
+			ft_putstr("\n", 2), free(path), exit(126));
 	if (execve(path, array, envp) == -1)
-	{
-		perror(array[0]);
-		free(path);
-		free_arr(&array);
-		close_fds(pipe_fd);
-		exit(EXIT_FAILURE);
-	}
+		(perror(array[0]), free(path), free_arr(&array),
+			close_fds(pipe_fd), exit(EXIT_FAILURE));
 }
 
 void	piper(int *pip, int wr_flags, char **av, char **envp)
